@@ -15,7 +15,7 @@ before_script:
   - export TF_VAR_aws_account_num=${AWS_ACCOUNT_NUMBER}
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
-  - scripts/terraform-wrapper.sh plan
+  - terraform plan
 
 after_success:
   # If branch name was matched with deploy/xxx, continue to apply.
