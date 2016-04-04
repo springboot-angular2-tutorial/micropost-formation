@@ -1,0 +1,39 @@
+---
+sudo: required
+dist: trusty
+language: ruby
+rvm:
+  - 2.2.3
+cache: bundler
+
+before_install:
+  - gem install travis -v 1.8.2 --no-rdoc --no-ri
+  - wget https://releases.hashicorp.com/terraform/0.6.14/terraform_0.6.14_linux_amd64.zip -O /tmp/terraform.zip
+  - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
+
+script:
+  - scripts/terraform-wrapper.sh plan
+
+after_success:
+  # If branch name was matched with deploy/xxx, continue to apply.
+  - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
+  - if [ -z "${ENV}" ]; then exit ; fi
+
+  # Export Terraform variables
+  - export TF_VAR_aws_account_num=${AWS_ACCOUNT_NUMBER}
+  - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
+
+  # Enable Terraform Remote
+  - scripts/terraform-enable-remote.sh
+
+  # Save current output to compare later
+  - terraform output | grep endpoint | tee out_before
+
+  # Execute Terraform and create tfstate on remote
+  - scripts/terraform-wrapper.sh apply
+
+  # Save current output to compare later
+  - terraform output | grep endpoint | tee out_after
+
+  # Compare output and build to provision ami
+  - diff out_before out_after || scripts/build-provisionings.sh

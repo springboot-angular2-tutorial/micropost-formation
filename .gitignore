@@ -1,0 +1,10 @@
+.DS_Store
+.envrc
+
+# IDE junk
+.idea/*
+*.iml
+.project
+
+# tfstate is saved on remote
+.terraform
