@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "teset"
+
 travis login --org --github-token ${GH_TOKEN}
 token=$(travis token --org)
 body='{
@@ -14,3 +16,5 @@ curl -s -X POST \
   -H "Authorization: token ${token}" \
   -d "${body}" \
   https://api.travis-ci.org/repo/springboot-angular2-tutorial%2Fmicropost-provisionings/requests
+
+echo "curl status $?"
