@@ -34,5 +34,5 @@ after_success:
   # Save current output to compare later
   - terraform output | grep endpoint | tee out_after
 
-  # Compare output and build to provision ami
+  # Compare output and take over building
   - diff out_before out_after || scripts/build-provisionings.sh
