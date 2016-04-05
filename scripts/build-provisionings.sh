@@ -1,13 +1,15 @@
 #!/bin/sh
 
-echo "teset"
-
 travis login --org --github-token ${GH_TOKEN}
 token=$(travis token --org)
-body='{
-"request": {
-  "branch":"master"
-}}'
+body=$(cat << EOS
+{
+  "request": {
+    "branch":"${TRAVIS_BRANCH}"
+  }
+}
+EOS
+)
 
 curl -s -X POST \
   -H "Content-Type: application/json" \
