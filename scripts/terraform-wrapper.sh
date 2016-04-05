@@ -4,7 +4,7 @@
 
 # If TF_VAR_ami_web is defined already, use it.
 # If TF_VAR_ami_web is not defined, get it from tfstate.
-${TF_VAR_ami_web:=$(terraform output ami_web)}
+TF_VAR_ami_web=${TF_VAR_ami_web:=$(terraform output ami_web)}
 if [ -n "${TF_VAR_ami_web}" ]; then
   export TF_VAR_ami_web
 fi
