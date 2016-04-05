@@ -15,9 +15,6 @@ before_script:
   - export TF_VAR_aws_account_num=${AWS_ACCOUNT_NUMBER}
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
-  - terraform plan
-
-after_success:
   # If branch name was matched with deploy/xxx, continue to apply.
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
   - if [ -z "${ENV}" ]; then exit ; fi
@@ -29,6 +26,7 @@ after_success:
   - terraform output | grep endpoint | tee out_before
 
   # Execute Terraform and create tfstate on remote
+  - scripts/terraform-wrapper.sh plan
   - scripts/terraform-wrapper.sh apply
 
   # Save current output to compare later
