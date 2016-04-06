@@ -34,5 +34,5 @@ script:
   # Save current output to compare later
   - terraform output | grep endpoint | tee out_after
 
-  # Compare output and take over building
+  # Compare output and take over building if endpoints were changed.
   - diff out_before out_after || scripts/build-provisionings.sh
