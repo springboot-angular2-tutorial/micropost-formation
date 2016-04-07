@@ -10,9 +10,9 @@ resource "aws_elb" "web" {
   ]
   listener {
     instance_port = 80
-    instance_protocol = "http"
+    instance_protocol = "tcp"
     lb_port = 80
-    lb_protocol = "http"
+    lb_protocol = "tcp"
   }
   health_check {
     healthy_threshold = 2
@@ -25,4 +25,9 @@ resource "aws_elb" "web" {
   idle_timeout = 400
   connection_draining = true
   connection_draining_timeout = 400
+}
+
+resource "aws_proxy_protocol_policy" "web" {
+  load_balancer = "${aws_elb.web.name}"
+  instance_ports = ["80"]
 }
