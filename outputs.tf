@@ -15,3 +15,6 @@ output "redis_endpoint" {
   value = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}:${aws_elasticache_cluster.micropost.cache_nodes.0.port}"
 }
 
+output "web_endpoint" {
+  value = "${cloudflare_record.micropost.hostname}"
+}
