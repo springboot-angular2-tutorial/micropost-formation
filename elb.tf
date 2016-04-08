@@ -7,6 +7,7 @@ resource "aws_elb" "web" {
   security_groups = [
     "${aws_security_group.internal.id}",
     "${aws_security_group.http.id}",
+    "${aws_security_group.https.id}",
   ]
   listener {
     instance_port = 80
