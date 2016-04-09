@@ -33,11 +33,32 @@ resource "aws_iam_role_policy" "es-client" {
   "Statement": [
     {
       "Action": [
-      "es:*"
-    ],
-    "Effect": "Allow",
-    "Resource": "*"
-  }]
+        "es:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "letsencrypt-cache-client" {
+  name = "es-client"
+  role = "${aws_iam_role.web.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:Put*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
 }
 EOF
 }
