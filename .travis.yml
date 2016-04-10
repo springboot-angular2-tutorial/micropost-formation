@@ -36,3 +36,4 @@ script:
 
   # Compare output and take over building if endpoints were changed.
   - diff out_before out_after || scripts/build-provisionings.sh
+  - diff out_before out_after || scripts/build-app.sh
