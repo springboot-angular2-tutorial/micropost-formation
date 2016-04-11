@@ -1,12 +1,12 @@
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
-  image_id = "${lookup(var.ami_web, var.aws_region)}"
+  image_id = "${var.ami_web}"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.internal.id}",
     "${aws_security_group.ssh.id}",
   ]
-  key_name = "akirasosa"
+  key_name = "id_rsa"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
   lifecycle {
