@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
-  image_id = "${var.ami_web}"
+  image_id = "${lookup(var.ami_web, var.aws_region)}"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.internal.id}",
@@ -24,8 +24,8 @@ resource "aws_autoscaling_group" "web" {
   force_delete = true
   launch_configuration = "${aws_launch_configuration.web.id}"
   vpc_zone_identifier = [
-    "${aws_subnet.public-a.id}",
-    "${aws_subnet.public-b.id}",
+    "${aws_subnet.public_primary.id}",
+    "${aws_subnet.public_secondary.id}",
   ]
   load_balancers = ["${aws_elb.web.name}"]
 }

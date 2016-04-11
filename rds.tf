@@ -16,7 +16,7 @@ resource "aws_db_subnet_group" "micropost" {
   name = "micropost-${var.env}"
   description = "Our main group of subnets"
   subnet_ids = [
-    "${aws_subnet.private-a.id}",
-    "${aws_subnet.private-b.id}",
+    "${aws_subnet.private_primary.id}",
+    "${aws_subnet.private_secondary.id}",
   ]
 }

@@ -1,8 +1,8 @@
 resource "aws_elb" "web" {
   name = "web-${var.env}"
   subnets = [
-    "${aws_subnet.public-a.id}",
-    "${aws_subnet.public-b.id}",
+    "${aws_subnet.public_primary.id}",
+    "${aws_subnet.public_secondary.id}",
   ]
   security_groups = [
     "${aws_security_group.internal.id}",

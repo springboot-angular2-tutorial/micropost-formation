@@ -4,12 +4,30 @@ variable "env" {
 }
 variable "aws_account_num" {
 }
+
 variable "aws_region" {
-  default = "ap-southeast-1"
+  default = "ap-northeast-1"
 }
 variable "ami_web" {
-  default = "ami-25c00c46"
+  default = {
+    ap-southeast-1 = "ami-25c00c46"
+    ap-northeast-1 = "ami-a21529cc"
+  }
 }
+variable "aws_az_primary" {
+  default = {
+    ap-southeast-1 = "ap-southeast-1a"
+    ap-northeast-1 = "ap-northeast-1a"
+  }
+}
+variable "aws_az_secondary" {
+  default = {
+    ap-southeast-1 = "ap-southeast-1b"
+    ap-northeast-1 = "ap-northeast-1c"
+  }
+}
+
+
 variable "cidr" {
   type = "map"
   default = {
