@@ -34,3 +34,6 @@ variable "cidr" {
 variable "desired_capacity_web" {
   default = 1
 }
+variable "max_size_web" {
+  default = 1
+}
