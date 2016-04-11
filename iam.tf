@@ -44,7 +44,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "letsencrypt-cache-client" {
-  name = "es-client"
+  name = "letsencrypt-cache-client"
   role = "${aws_iam_role.web.id}"
   policy = <<EOF
 {

@@ -7,6 +7,9 @@
 TF_VAR_ami_web=${TF_VAR_ami_web:=$(terraform output ami_web)}
 if [ -n "${TF_VAR_ami_web}" ]; then
   export TF_VAR_ami_web
+else
+  # use ubuntu default ami with capacity 0.
+  export TF_VAR_desired_capacity_web=0
 fi
 
 terraform $@ \

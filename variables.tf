@@ -16,3 +16,7 @@ variable "cidr" {
     office = "42.116.5.4/32"
   }
 }
+
+variable "desired_capacity_web" {
+  default = 1
+}

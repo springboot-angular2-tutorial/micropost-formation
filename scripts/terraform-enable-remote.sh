@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -z ${ENV} ]; then
+if [ -z "${ENV}" ]; then
   echo "ENV is required."
   exit 1
 fi
