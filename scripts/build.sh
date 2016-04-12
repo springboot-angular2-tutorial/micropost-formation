@@ -13,7 +13,8 @@ scripts/terraform-enable-remote.sh
 terraform output | tee out_before
 
 # Execute Terraform and create tfstate on remote
-scripts/terraform-wrapper.sh plan || exit
+scripts/terraform-wrapper.sh plan || exit 0
+echo "test"
 scripts/terraform-wrapper.sh apply
 
 # Deploy app when initial deployment
