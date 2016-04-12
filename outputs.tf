@@ -1,5 +1,5 @@
 output "ami_web" {
-  value = "${var.ami_web}"
+  value = "${aws_launch_configuration.web.image_id}"
 }
 
 output "rds_endpoint" {

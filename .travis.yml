@@ -25,10 +25,10 @@ script:
   - scripts/terraform-enable-remote.sh
 
   # Save current output to compare later
-  - terraform output | grep endpoint | tee out_before
+  - terraform output | tee out_before
 
   # Execute Terraform and create tfstate on remote
-  - scripts/terraform-wrapper.sh plan || exit
+  - scripts/terraform-wrapper.sh plan
   - scripts/terraform-wrapper.sh apply
 
   # Deploy app when initial deployment

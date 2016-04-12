@@ -13,5 +13,3 @@ ansible-playbook -i inventory --connection=local --sudo --diff \
   site.yml
 
 /usr/local/bin/update_cert.sh >/var/log/update_cert 2>&1
-
-export MY_TEST=hello
