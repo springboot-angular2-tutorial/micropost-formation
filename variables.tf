@@ -9,7 +9,6 @@ variable "aws_region" {
   default = "ap-northeast-1"
 }
 variable "ami_web" {
-  default = "ami-a21529cc"
 }
 variable "aws_az_primary" {
   default = {
@@ -29,11 +28,4 @@ variable "cidr" {
   default = {
     office = "42.116.5.4/32"
   }
-}
-
-variable "desired_capacity_web" {
-  default = 1
-}
-variable "max_size_web" {
-  default = 1
 }

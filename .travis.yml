@@ -28,11 +28,8 @@ script:
   - terraform output | grep endpoint | tee out_before
 
   # Execute Terraform and create tfstate on remote
-  - scripts/terraform-wrapper.sh plan
+  - scripts/terraform-wrapper.sh plan || exit
   - scripts/terraform-wrapper.sh apply
-
-  # Save current output to compare later
-  - terraform output | grep endpoint | tee out_after
 
   # Deploy app when initial deployment
   - if [ ! -s out_before ]; then scripts/build-app.sh ; fi
