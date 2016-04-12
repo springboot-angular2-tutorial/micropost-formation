@@ -1,9 +1,5 @@
 output "ami_web" {
-  value = "${aws_launch_configuration.web.image_id}"
-}
-
-output "logserver_endpoint" {
-  value = "${aws_elasticsearch_domain.logserver.endpoint}"
+  value = "${var.ami_web}"
 }
 
 output "rds_endpoint" {
@@ -13,8 +9,4 @@ output "rds_endpoint" {
 // I have only one node..
 output "redis_endpoint" {
   value = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}:${aws_elasticache_cluster.micropost.cache_nodes.0.port}"
-}
-
-output "web_endpoint" {
-  value = "${cloudflare_record.micropost.hostname}"
 }

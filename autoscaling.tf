@@ -4,6 +4,9 @@ resource "template_file" "web_init" {
     logserver_endpoint = "${aws_elasticsearch_domain.logserver.endpoint}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
   }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_launch_configuration" "web" {
