@@ -1,3 +1,11 @@
+resource "template_file" "web_init" {
+  template = "${file("templates/web_init.sh")}"
+  vars {
+    logserver_endpoint = "${aws_elasticsearch_domain.logserver.endpoint}"
+    web_endpoint = "${cloudflare_record.micropost.hostname}"
+  }
+}
+
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
   image_id = "${var.ami_web}"
@@ -9,6 +17,7 @@ resource "aws_launch_configuration" "web" {
   key_name = "id_rsa"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
+  user_data = "${template_file.web_init.rendered}"
   lifecycle {
     create_before_destroy = true
   }
