@@ -18,6 +18,27 @@ before_script:
   - export TF_VAR_aws_account_num=${AWS_ACCOUNT_NUMBER}
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
-  - scripts/build.sh
+  - echo
 after_success:
+  # If branch name matched with deploy/xxx, then continue.
+  - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
+  - test -z "${ENV}" && exit 0
+
+  # Enable terraform remote
+  - scripts/terraform-enable-remote.sh
+
+  # Use current output later
+  - terraform output | tee out_before
+
+  # If tfvars are not enough, exit
+  - scripts/export-tfvars.sh || exit 0
+
+  # Plan and apply
+  - scripts/terraform-wrapper.sh plan || exit 1
+  - scripts/terraform-wrapper.sh apply || exit 1
+
+  # Deploy app when initial deployment
+  - test -s out_before || scripts/build-app.sh
+
+  # Remove unused amis
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb

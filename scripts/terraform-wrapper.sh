@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . $(dirname $0)/terraform-enable-remote.sh
+. $(dirname $0)/export-tfvars.sh
 
 terraform $@ \
   -state="${ENV}.tfstate" \
