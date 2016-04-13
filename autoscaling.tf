@@ -30,19 +30,24 @@ resource "aws_launch_configuration" "web" {
 }
 
 resource "aws_autoscaling_group" "web" {
-  name = "web-${var.env}"
+  # https://groups.google.com/forum/m/#!msg/terraform-tool/7Gdhv1OAc80/iNQ93riiLwAJ
+  name = "web-${var.env}-${aws_launch_configuration.web.name}"
+  launch_configuration = "${aws_launch_configuration.web.id}"
   max_size = 4
   min_size = 1
+  desired_capacity = "${var.web_desired_capacity}"
+  min_elb_capacity ="${var.web_desired_capacity}"
   health_check_grace_period = 300
   health_check_type = "ELB"
-  desired_capacity = "${var.web_desired_capacity}"
   force_delete = true
-  launch_configuration = "${aws_launch_configuration.web.id}"
   vpc_zone_identifier = [
     "${aws_subnet.public_primary.id}",
     "${aws_subnet.public_secondary.id}",
   ]
   load_balancers = ["${aws_elb.web.name}"]
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_autoscaling_policy" "web-scale-out" {
