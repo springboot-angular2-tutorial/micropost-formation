@@ -8,8 +8,9 @@ cache:
   directories:
   - vendor/bundle
 
-before_install:
+install:
   - gem install travis -v 1.8.2 --no-rdoc --no-ri
+  - bundle install
   - wget https://releases.hashicorp.com/terraform/0.6.14/terraform_0.6.14_linux_amd64.zip -O /tmp/terraform.zip
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
@@ -18,3 +19,5 @@ before_script:
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
   - scripts/build.sh
+after_success:
+  - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
