@@ -42,3 +42,11 @@ after_success:
 
   # Remove unused amis
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
+
+  # If ami_web was updated, scale out and in to replace instances.
+  - lines=$(cat <(terraform output) out_before | grep "^ami_web" | uniq | wc -l)
+  - capacity=$(terraform output web_desired_capacity)
+  - >
+    test $lines -eq 2 \
+    && scripts/terraform-wrapper.sh apply -var "web_desired_capacity=$((capacity * 2))" \
+    && scripts/terraform-wrapper.sh apply -var "web_desired_capacity=$((capacity * 1))"
