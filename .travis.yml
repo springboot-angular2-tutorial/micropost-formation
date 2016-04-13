@@ -47,6 +47,6 @@ after_success:
   - lines=$(cat <(terraform output) out_before | grep "^ami_web" | uniq | wc -l)
   - capacity=$(terraform output web_desired_capacity)
   - >
-    test $lines -eq 2 \
-    && scripts/terraform-wrapper.sh apply -var "web_desired_capacity=$((capacity * 2))" \
+    test $lines -eq 2
+    && scripts/terraform-wrapper.sh apply -var "web_desired_capacity=$((capacity * 2))"
     && scripts/terraform-wrapper.sh apply -var "web_desired_capacity=$((capacity * 1))"
