@@ -2,13 +2,16 @@ variable "env" {
   description = "dev, stg, prod and etc."
   default = "dev"
 }
+variable "cidr" {
+  type = "map"
+  default = {
+    office = "42.116.5.4/32"
+  }
+}
 variable "aws_account_num" {
 }
-
 variable "aws_region" {
   default = "ap-northeast-1"
-}
-variable "ami_web" {
 }
 variable "aws_az_primary" {
   default = {
@@ -23,9 +26,8 @@ variable "aws_az_secondary" {
   }
 }
 
-variable "cidr" {
-  type = "map"
-  default = {
-    office = "42.116.5.4/32"
-  }
+variable "ami_web" {
+}
+variable "web_desired_capacity" {
+  default = 1
 }

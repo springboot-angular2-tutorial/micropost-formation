@@ -35,7 +35,7 @@ resource "aws_autoscaling_group" "web" {
   min_size = 1
   health_check_grace_period = 300
   health_check_type = "ELB"
-  desired_capacity = 1
+  desired_capacity = "${var.web_desired_capacity}"
   force_delete = true
   launch_configuration = "${aws_launch_configuration.web.id}"
   vpc_zone_identifier = [
