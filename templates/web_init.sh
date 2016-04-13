@@ -4,6 +4,7 @@
 ENV_FILE=/opt/micropost/env.sh
 mkdir -p $(dirname ${ENV_FILE})
 cat << EOF > ${ENV_FILE}
+export SPRING_PROFILES_ACTIVE=${env}
 export RDS_ENDPOINT=${rds_endpoint}
 export REDIS_ENDPOINT=${redis_endpoint}
 EOF

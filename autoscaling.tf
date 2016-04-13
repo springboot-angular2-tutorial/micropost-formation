@@ -1,9 +1,9 @@
 resource "template_file" "web_init" {
   template = "${file("templates/web_init.sh")}"
   vars {
+    env = "${var.env}"
     logserver_endpoint = "${aws_elasticsearch_domain.logserver.endpoint}"
     rds_endpoint = "${aws_db_instance.micropost.endpoint}"
-    // I have only one node...
     redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}:${aws_elasticache_cluster.micropost.cache_nodes.0.port}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
   }
