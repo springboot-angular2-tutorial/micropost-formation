@@ -23,13 +23,13 @@ echo "ami_web is ${TF_VAR_ami_web} ."
 
 scripts/terraform-wrapper.sh plan
 if [ $? -ne 0 ]; then
-  echo "Plan failed."
+  echo "Plan was failed."
   exit 1
 fi
 
 scripts/terraform-wrapper.sh apply
 if [ $? -ne 0 ]; then
-  echo "Apply failed."
+  echo "Apply was failed."
   exit 1
 fi
 
