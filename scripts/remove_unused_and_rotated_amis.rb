@@ -26,8 +26,8 @@ images = unused_rotated_images
 
 puts 'Deregistering amis.'
 images.map(&:image_id)
+  .tap { |id| puts id }
   .map { |id| Aws::EC2::Image.new(id) }
-  .tap { |img| ap img }
   .each { |img| img.deregister rescue nil }
 
 puts 'Removing snapshots related with de-registered ami.'
@@ -35,6 +35,6 @@ images.map { |i| i.block_device_mappings.map(&:ebs) }
   .flatten
   .compact
   .map(&:snapshot_id)
+  .tap { |s_id| puts s_id }
   .map { |id| Aws::EC2::Snapshot.new(id) }
-  .tap { |s| ap s }
   .each { |s| s.delete rescue nil }
