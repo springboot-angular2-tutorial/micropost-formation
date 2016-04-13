@@ -11,4 +11,4 @@ status=$?
 # Need to push state, even if apply was failed.
 terraform remote push
 
-exit status
+exit ${status}
