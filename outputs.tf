@@ -1,4 +1,4 @@
-output "ami_web" {
+output "web_ami" {
   value = "${aws_launch_configuration.web.image_id}"
 }
 

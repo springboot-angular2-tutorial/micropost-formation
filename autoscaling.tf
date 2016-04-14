@@ -14,7 +14,7 @@ resource "template_file" "web_init" {
 
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
-  image_id = "${var.ami_web}"
+  image_id = "${var.web_ami}"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.internal.id}",

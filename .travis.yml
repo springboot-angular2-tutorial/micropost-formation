@@ -30,9 +30,9 @@ after_success:
   # Save current output to use it later
   - terraform output | tee out_before
 
-  # If TF_VAR_ami_web is not defined, exit.
+  # If TF_VAR_web_ami is not defined, exit.
   - scripts/export-tfvars.sh
-  - test -z "${TF_VAR_ami_web}" && exit 0
+  - test -z "${TF_VAR_web_ami}" && exit 0
 
   # Plan and apply
   - scripts/terraform-wrapper.sh plan || exit 1
@@ -44,9 +44,9 @@ after_success:
   # Remove unused amis
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
 
-  # Replace instances if ami_web was updated.
+  # Replace instances if web_ami was updated.
   - terraform output | tee out_after
-  - lines=$(cat out_before out_after | grep 'ami_web' | uniq | wc -l)
+  - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(terraform output web_autoscaling_group_name)
   - test ${lines} -eq 2 && bundle exec ruby scripts/replace_old_instances.rb ${asg_name}
 

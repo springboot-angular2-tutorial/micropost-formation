@@ -26,7 +26,7 @@ variable "aws_az_secondary" {
   }
 }
 
-variable "ami_web" {
+variable "web_ami" {
 }
 variable "web_desired_capacity" {
   default = 1
