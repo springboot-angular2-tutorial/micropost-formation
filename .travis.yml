@@ -42,3 +42,9 @@ after_success:
 
   # Remove unused amis
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
+
+  # Replace instances if ami_web was updated.
+  - terraform output | tee out_after
+  - lines=$(cat out_before out_after | grep 'ami_web' | uniq | wc -l)
+  - test $lines -eq 2 && bundle exec ruby replace_old_instances.rb $(terraform output web_autoscaling_group_name)
+
