@@ -35,7 +35,10 @@ until is_all_in_service.call
   sleep 5
 end
 puts ''
+puts 'Completed to scale out.'
 
+puts 'Terminating old instances.'
 old_instances.each do |i|
   i.terminate(should_decrement_desired_capacity: true)
 end
+puts 'Done.'
