@@ -24,7 +24,7 @@ resource "aws_iam_role" "web" {
 EOF
 }
 
-resource "aws_iam_role_policy" "es-client" {
+resource "aws_iam_role_policy" "es_client" {
   name = "es-client"
   role = "${aws_iam_role.web.id}"
   policy = <<EOF
@@ -43,7 +43,7 @@ resource "aws_iam_role_policy" "es-client" {
 EOF
 }
 
-resource "aws_iam_role_policy" "letsencrypt-cache-client" {
+resource "aws_iam_role_policy" "letsencrypt_cache_client" {
   name = "letsencrypt-cache-client"
   role = "${aws_iam_role.web.id}"
   policy = <<EOF
@@ -63,7 +63,7 @@ resource "aws_iam_role_policy" "letsencrypt-cache-client" {
 EOF
 }
 
-resource "aws_iam_role_policy" "codedeploy-client" {
+resource "aws_iam_role_policy" "codedeploy_client" {
   name = "codedeploy-client"
   role = "${aws_iam_role.web.id}"
   policy = <<EOF
@@ -83,7 +83,7 @@ resource "aws_iam_role_policy" "codedeploy-client" {
 EOF
 }
 
-resource "aws_iam_role" "codedeploy-service" {
+resource "aws_iam_role" "codedeploy_service" {
   name = "codedeploy-service-${var.env}"
   assume_role_policy = <<EOF
 {
@@ -104,9 +104,9 @@ resource "aws_iam_role" "codedeploy-service" {
 EOF
 }
 
-resource "aws_iam_role_policy" "codedeploy-service-policy" {
+resource "aws_iam_role_policy" "codedeploy_service_policy" {
   name = "codedeploy-service"
-  role = "${aws_iam_role.codedeploy-service.id}"
+  role = "${aws_iam_role.codedeploy_service.id}"
   policy = <<EOF
 {
     "Version": "2012-10-17",

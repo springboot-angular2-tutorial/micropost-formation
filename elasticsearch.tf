@@ -18,13 +18,14 @@ resource "aws_elasticsearch_domain" "logserver" {
       "Effect": "Allow",
       "Condition": {
         "IpAddress": {
-          "aws:SourceIp": "${var.cidr.office}"
+          "aws:SourceIp": "${var.segment.office}"
         }
       },
       "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_num}:domain/micropost-${var.env}/*"
     }
   ]
 }
+
 CONFIG
   snapshot_options {
     automated_snapshot_start_hour = 23

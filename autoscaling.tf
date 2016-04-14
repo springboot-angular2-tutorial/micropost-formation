@@ -45,7 +45,7 @@ resource "aws_autoscaling_group" "web" {
   load_balancers = ["${aws_elb.web.name}"]
 }
 
-resource "aws_autoscaling_policy" "web-scale-out" {
+resource "aws_autoscaling_policy" "web_scale_out" {
   name = "Instance-ScaleOut-CPU-High"
   scaling_adjustment = 1
   adjustment_type = "ChangeInCapacity"
@@ -53,7 +53,7 @@ resource "aws_autoscaling_policy" "web-scale-out" {
   autoscaling_group_name = "${aws_autoscaling_group.web.name}"
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-gte-threshold" {
+resource "aws_cloudwatch_metric_alarm" "web_gte_threshold" {
   alarm_name = "web-${var.env}-CPU-Utilization-High-30"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "1"
@@ -65,10 +65,10 @@ resource "aws_cloudwatch_metric_alarm" "web-gte-threshold" {
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
   }
-  alarm_actions = ["${aws_autoscaling_policy.web-scale-out.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.web_scale_out.arn}"]
 }
 
-resource "aws_autoscaling_policy" "web-scale-in" {
+resource "aws_autoscaling_policy" "web_scale_in" {
   name = "Instance-ScaleIn-CPU-Low"
   scaling_adjustment = -1
   adjustment_type = "ChangeInCapacity"
@@ -76,7 +76,7 @@ resource "aws_autoscaling_policy" "web-scale-in" {
   autoscaling_group_name = "${aws_autoscaling_group.web.name}"
 }
 
-resource "aws_cloudwatch_metric_alarm" "web-lt-threshold" {
+resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   alarm_name = "web-${var.env}-CPU-Utilization-Low-5"
   comparison_operator = "LessThanThreshold"
   evaluation_periods = "1"
@@ -88,5 +88,5 @@ resource "aws_cloudwatch_metric_alarm" "web-lt-threshold" {
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
   }
-  alarm_actions = ["${aws_autoscaling_policy.web-scale-in.arn}"]
+  alarm_actions = ["${aws_autoscaling_policy.web_scale_in.arn}"]
 }

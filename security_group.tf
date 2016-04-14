@@ -34,7 +34,7 @@ resource "aws_security_group" "ssh" {
     to_port = 22
     protocol = "tcp"
     cidr_blocks = [
-      "${var.cidr.office}",
+      "${var.segment.office}",
     ]
   }
   egress {

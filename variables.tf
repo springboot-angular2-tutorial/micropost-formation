@@ -2,7 +2,7 @@ variable "env" {
   description = "dev, stg, prod and etc."
   default = "dev"
 }
-variable "cidr" {
+variable "segment" {
   type = "map"
   default = {
     office = "42.116.5.4/32"
