@@ -30,8 +30,9 @@ after_success:
   # Save current output to use it later
   - terraform output | tee out_before
 
-  # If tfvars are not enough, exit
-  - scripts/export-tfvars.sh || exit 0
+  # If TF_VAR_ami_web is not defined, exit.
+  - scripts/export-tfvars.sh
+  - test -z "${TF_VAR_ami_web}" && exit 0
 
   # Plan and apply
   - scripts/terraform-wrapper.sh plan || exit 1
