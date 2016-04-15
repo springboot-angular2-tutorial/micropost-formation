@@ -31,7 +31,7 @@ after_success:
   - terraform output | tee out_before
 
   # If TF_VAR_web_ami is not defined, exit.
-  - scripts/export-tfvars.sh
+  - . scripts/export-tfvars.sh
   - test -z "${TF_VAR_web_ami}" && exit 0
 
   # Plan and apply
