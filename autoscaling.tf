@@ -4,7 +4,7 @@ resource "template_file" "web_init" {
     env = "${var.env}"
     logserver_endpoint = "${aws_elasticsearch_domain.logserver.endpoint}"
     rds_endpoint = "${aws_db_instance.micropost.endpoint}"
-    redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}:${aws_elasticache_cluster.micropost.cache_nodes.0.port}"
+    redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
   }
   lifecycle {
