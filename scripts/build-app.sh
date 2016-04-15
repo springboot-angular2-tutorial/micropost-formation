@@ -16,4 +16,4 @@ curl -s -X POST \
   -H "Travis-API-Version: 3" \
   -H "Authorization: token ${token}" \
   -d "${body}" \
-  https://api.travis-ci.org/repo/akirasosa%2Ftestapp1/requests
+  https://api.travis-ci.org/repo/springboot-angular2-tutorial%2Fboot-app/requests
