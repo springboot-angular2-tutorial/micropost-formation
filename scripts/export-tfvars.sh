@@ -12,7 +12,7 @@ if [ -n "${TF_VAR_web_desired_capacity}" ]; then
   export TF_VAR_web_desired_capacity
 fi
 
-if [ "${ENV}" == "prod" ]; then
+if [ "${ENV}" = "prod" ]; then
   # prod is special
   export TF_VAR_web_host_name="micropost"
 else
