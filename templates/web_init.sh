@@ -18,10 +18,7 @@ cat << EOF > inventory
 localhost
 EOF
 
-ansible-playbook -i inventory --connection=local --sudo --diff \
-  -e "logstash_elasticsearch_host=${logserver_endpoint}" \
-  -e "letsencrypt_host=${web_endpoint}" \
-  site.yml
+ansible-playbook -i inventory --connection=local --sudo --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "letsencrypt_host=${web_endpoint}"  site.yml
 )
 
 # Update SSL cert
