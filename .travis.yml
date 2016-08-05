@@ -15,7 +15,7 @@ install:
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 before_script:
-  - export TF_VAR_aws_account_num=${AWS_ACCOUNT_NUMBER}
+  - export TF_VAR_aws_account_id=$(bundle exec ruby scripts/get_account_id.rb)
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
   - echo

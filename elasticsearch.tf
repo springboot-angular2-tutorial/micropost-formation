@@ -7,10 +7,10 @@ resource "aws_elasticsearch_domain" "logserver" {
     {
       "Action": "es:*",
       "Principal": {
-        "AWS": "arn:aws:iam::${var.aws_account_num}:root"
+        "AWS": "arn:aws:iam::${var.aws_account_id}:root"
       },
       "Effect": "Allow",
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_num}:domain/micropost-${var.env}/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/micropost-${var.env}/*"
     },
     {
       "Action": "es:*",
@@ -21,7 +21,7 @@ resource "aws_elasticsearch_domain" "logserver" {
           "aws:SourceIp": "${var.segment["office"]}"
         }
       },
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_num}:domain/micropost-${var.env}/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/micropost-${var.env}/*"
     }
   ]
 }
