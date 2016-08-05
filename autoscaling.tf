@@ -39,8 +39,8 @@ resource "aws_launch_configuration" "web" {
 resource "aws_autoscaling_group" "web" {
   name = "web-${var.env}"
   launch_configuration = "${aws_launch_configuration.web.id}"
-  max_size = 0
-  min_size = 0
+  max_size = 4
+  min_size = 1
   desired_capacity = "${var.web_desired_capacity}"
   health_check_grace_period = 300
   health_check_type = "ELB"
