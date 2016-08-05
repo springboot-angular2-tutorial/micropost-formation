@@ -1,5 +1,5 @@
 output "web_ami" {
-  value = "${aws_launch_configuration.web.image_id}"
+  value = "${data.aws_ami.micropost_web.id}"
 }
 
 output "web_desired_capacity" {

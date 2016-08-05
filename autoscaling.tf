@@ -1,4 +1,4 @@
-resource "template_file" "web_init" {
+data "template_file" "web_init" {
   template = "${file("templates/web_init.sh")}"
   vars {
     env = "${var.env}"
@@ -7,14 +7,21 @@ resource "template_file" "web_init" {
     redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
   }
-  lifecycle {
-    create_before_destroy = true
+}
+
+data "aws_ami" "micropost_web" {
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "tag:Name"
+    values = ["micropost-web"]
   }
 }
 
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
-  image_id = "${var.web_ami}"
+  image_id = "${data.aws_ami.micropost_web.id}"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.internal.id}",
@@ -23,7 +30,7 @@ resource "aws_launch_configuration" "web" {
   key_name = "id_rsa"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
-  user_data = "${template_file.web_init.rendered}"
+  user_data = "${data.template_file.web_init.rendered}"
   lifecycle {
     create_before_destroy = true
   }
@@ -32,8 +39,8 @@ resource "aws_launch_configuration" "web" {
 resource "aws_autoscaling_group" "web" {
   name = "web-${var.env}"
   launch_configuration = "${aws_launch_configuration.web.id}"
-  max_size = 4
-  min_size = 1
+  max_size = 0
+  min_size = 0
   desired_capacity = "${var.web_desired_capacity}"
   health_check_grace_period = 300
   health_check_type = "ELB"

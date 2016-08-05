@@ -14,8 +14,6 @@ variable "web_host_name" {
 
 // stateful variables
 
-variable "web_ami" {
-}
 variable "web_desired_capacity" {
   default = 1
 }

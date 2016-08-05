@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 language: ruby
 rvm:
-  - 2.2.3
+  - 2.3.0
 cache:
   directories:
   - vendor/bundle
@@ -22,7 +22,7 @@ script:
 after_success:
   # If branch name matched with deploy/xxx, then continue.
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
-  - test -z "${ENV}" && exit 0
+  - test -z "${ENV}" && (echo "${TRAVIS_BRANCH} is not a branch to deploy." && exit 0)
 
   # Enable terraform remote
   - scripts/terraform-enable-remote.sh
@@ -30,16 +30,9 @@ after_success:
   # Save current output to use it later
   - terraform output | tee out_before
 
-  # If TF_VAR_web_ami is not defined, exit.
-  - . scripts/export-tfvars.sh
-  - test -z "${TF_VAR_web_ami}" && exit 0
-
   # Plan and apply
   - scripts/terraform-wrapper.sh plan || exit 1
   - scripts/terraform-wrapper.sh apply || exit 1
-
-  # Deploy app when initial deployment
-  - test -s out_before || scripts/build-app.sh
 
   # Remove unused amis
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb

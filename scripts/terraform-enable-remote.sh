@@ -5,6 +5,8 @@ if [ -z "${ENV}" ]; then
   exit 1
 fi
 
+rm -rf ./.terraform/
+
 terraform remote config \
   -state="${ENV}.tfstate" \
   -backend=S3 \

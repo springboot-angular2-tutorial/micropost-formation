@@ -18,7 +18,7 @@ resource "aws_elasticsearch_domain" "logserver" {
       "Effect": "Allow",
       "Condition": {
         "IpAddress": {
-          "aws:SourceIp": "${var.segment.office}"
+          "aws:SourceIp": "${var.segment["office"]}"
         }
       },
       "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_num}:domain/micropost-${var.env}/*"
