@@ -7,6 +7,7 @@ cat << EOF > $${ENV_FILE}
 export SPRING_PROFILES_ACTIVE=${env}
 export RDS_ENDPOINT=${rds_endpoint}
 export REDIS_ENDPOINT=${redis_endpoint}
+export S3_DEPLOY_BUCKET=${s3_deploy_bucket}
 EOF
 
 # Finalize provisioning by using resolved endpoints.
@@ -20,7 +21,7 @@ localhost
 localhost
 EOF
 
-ansible-playbook -i inventory --connection=local --sudo --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "letsencrypt_host=${web_endpoint}" site.yml
+ansible-playbook -i inventory --connection=local --sudo --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "letsencrypt_host=${web_endpoint}" -e "deploy_bucket=${s3_deploy_bucket}" site.yml
 )
 
 # Update SSL cert

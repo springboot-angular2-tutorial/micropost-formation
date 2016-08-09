@@ -6,6 +6,7 @@ data "template_file" "web_init" {
     rds_endpoint = "${aws_db_instance.micropost.endpoint}"
     redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
+    s3_deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   }
 }
 
