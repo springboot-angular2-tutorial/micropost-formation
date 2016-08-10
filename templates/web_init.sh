@@ -25,4 +25,4 @@ ansible-playbook -i inventory --connection=local --sudo --diff -e "logstash_elas
 )
 
 # Update SSL cert
-/usr/local/bin/update_cert.sh >/var/log/update_cert 2>&1
+/usr/local/bin/update_cert.sh
