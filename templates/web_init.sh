@@ -15,9 +15,7 @@ EOF
 cd /opt/provisioning
 
 cat << EOF > inventory
-[web]
-localhost
-[deploy]
+[webservers]
 localhost
 EOF
 

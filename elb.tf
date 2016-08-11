@@ -9,11 +9,12 @@ resource "aws_elb" "web" {
     "${aws_security_group.http.id}",
     "${aws_security_group.https.id}",
   ]
+  // use for health check
   listener {
     instance_port = 80
-    instance_protocol = "tcp"
+    instance_protocol = "http"
     lb_port = 80
-    lb_protocol = "tcp"
+    lb_protocol = "http"
   }
   listener {
     instance_port = 443
@@ -25,7 +26,7 @@ resource "aws_elb" "web" {
     healthy_threshold = 2
     unhealthy_threshold = 2
     timeout = 5
-    target = "HTTP:81/manage/health"
+    target = "HTTP:80/manage/health"
     interval = 30
   }
   cross_zone_load_balancing = true
@@ -36,5 +37,5 @@ resource "aws_elb" "web" {
 
 resource "aws_proxy_protocol_policy" "web" {
   load_balancer = "${aws_elb.web.name}"
-  instance_ports = ["80", "443"]
+  instance_ports = ["443"]
 }
