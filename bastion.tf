@@ -6,7 +6,7 @@ resource "aws_instance" "bastion" {
     "${aws_security_group.ssh.id}",
     "${aws_security_group.internal.id}",
   ]
-  key_name = "id_rsa"
+  key_name = "${aws_key_pair.micropost.key_name}"
   associate_public_ip_address = true
   tags {
     Name = "Bastion"

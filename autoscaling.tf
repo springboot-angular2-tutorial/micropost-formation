@@ -17,7 +17,7 @@ resource "aws_launch_configuration" "web" {
   security_groups = [
     "${aws_security_group.internal.id}",
   ]
-  key_name = "id_rsa"
+  key_name = "${aws_key_pair.micropost.key_name}"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
   user_data = "${data.template_file.web_init.rendered}"

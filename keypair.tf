@@ -1,0 +1,4 @@
+resource "aws_key_pair" "micropost" {
+  key_name = "micropost"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDbCML308PObiUCSJwkX8JsX434d7TStWTeEiIyOb96JTuT3dxgz4eCGBDcYH3McmSpg4jz4HJAmwxWeeyFhHiAwNoCsND3AaKiG0pzNsfCc7I6IFdFJHubVaAZf+YivoZQUSCzQhZmANMOGF7BPMN3OL5cZMm+7MDdHDJVOtxrM1QhsM9aHxTgWxgn4uKvQoxxDmx/0kbrIC0al3Fi0p+kK8lXbSJ+dIDbWPtX0ntxMK2K8n5lWP8bwBQIh+tSPG4pxgxD++GjZ94PiKcsHLaxhyiI1/H29bQq2+dyO1enHux3JWmPRa0EOXAricyoWxpXskT6UxtEupP4Q+nd6tW/ akira@Macintosh.local"
+}
