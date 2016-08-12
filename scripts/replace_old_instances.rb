@@ -9,6 +9,7 @@ ASG_NAME = ARGV[0]
 
 as = Aws::AutoScaling::Client.new
 asg = Aws::AutoScaling::AutoScalingGroup.new(ASG_NAME, client: as)
+elb = Aws::ElasticLoadBalancing::Client.new
 
 old_instances = asg.instances
 
@@ -25,7 +26,11 @@ asg.set_desired_capacity(
 
 is_all_in_service = lambda do
   asg.reload
-  in_services = asg.instances.select { |i| i.lifecycle_state == 'InService' }
+  in_services = asg.load_balancers
+                  .map(&:load_balancer_name)
+                  .map { |lb_name| elb.describe_instance_health(load_balancer_name: lb_name).instance_states }
+                  .flatten
+                  .select { |s| s.state == 'InService' }
   in_services.size >= asg.desired_capacity
 end
 
