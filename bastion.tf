@@ -2,7 +2,7 @@ resource "aws_instance" "bastion" {
   ami = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.public_primary.id}"
-  security_groups = [
+  vpc_security_group_ids = [
     "${aws_security_group.ssh.id}",
     "${aws_security_group.internal.id}",
   ]
