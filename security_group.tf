@@ -16,12 +16,14 @@ resource "aws_security_group" "internal" {
       "0.0.0.0/0"
     ]
   }
-  tags {
-    Name = "internal"
-    Env = "${var.env}"
-  }
   lifecycle {
     create_before_destroy = true
+  }
+  tags {
+    Name = "${var.app}-${var.env}-internal"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "internal"
   }
 }
 
@@ -46,12 +48,14 @@ resource "aws_security_group" "ssh" {
       "0.0.0.0/0"
     ]
   }
-  tags {
-    Name = "ssh"
-    Env = "${var.env}"
-  }
   lifecycle {
     create_before_destroy = true
+  }
+  tags {
+    Name = "${var.app}-${var.env}-ssh"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "ssh"
   }
 }
 
@@ -75,12 +79,14 @@ resource "aws_security_group" "http" {
       "0.0.0.0/0"
     ]
   }
-  tags {
-    Name = "http"
-    Env = "${var.env}"
-  }
   lifecycle {
     create_before_destroy = true
+  }
+  tags {
+    Name = "${var.app}-${var.env}-http"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "http"
   }
 }
 
@@ -104,11 +110,13 @@ resource "aws_security_group" "https" {
       "0.0.0.0/0"
     ]
   }
-  tags {
-    Name = "https"
-    Env = "${var.env}"
-  }
   lifecycle {
     create_before_destroy = true
+  }
+  tags {
+    Name = "${var.app}-${var.env}-https"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "https"
   }
 }

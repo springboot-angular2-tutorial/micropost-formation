@@ -10,6 +10,11 @@ resource "aws_elasticache_cluster" "micropost" {
     "${aws_security_group.internal.id}",
   ]
   subnet_group_name = "${aws_elasticache_subnet_group.micropost.name}"
+  tags {
+    Name = "${var.app}-${var.env}"
+    App = "${var.app}"
+    Env = "${var.env}"
+  }
 }
 
 resource "aws_elasticache_subnet_group" "micropost" {

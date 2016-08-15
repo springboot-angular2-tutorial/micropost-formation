@@ -1,5 +1,5 @@
-resource "aws_elasticsearch_domain" "logserver" {
-  domain_name = "micropost-${var.env}"
+resource "aws_elasticsearch_domain" "micropost" {
+  domain_name = "${var.app}-${var.env}"
   access_policies = <<CONFIG
 {
   "Version": "2012-10-17",
@@ -37,5 +37,10 @@ CONFIG
     ebs_enabled = true
     volume_size = 10
     volume_type = "gp2"
+  }
+  tags {
+    Name = "${var.app}-${var.env}"
+    App = "${var.app}"
+    Env = "${var.env}"
   }
 }

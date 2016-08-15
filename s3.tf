@@ -10,4 +10,9 @@ resource "aws_s3_bucket" "deploy" {
       days = 20
     }
   }
+  tags {
+    Name = "${var.app}-${var.env}"
+    App = "${var.app}"
+    Env = "${var.env}"
+  }
 }

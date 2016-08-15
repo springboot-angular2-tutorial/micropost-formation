@@ -1,5 +1,5 @@
 resource "aws_elb" "web" {
-  name = "web-${var.env}"
+  name = "${var.app}-${var.env}-web"
   subnets = [
     "${aws_subnet.public_primary.id}",
     "${aws_subnet.public_secondary.id}",
@@ -33,6 +33,12 @@ resource "aws_elb" "web" {
   idle_timeout = 400
   connection_draining = true
   connection_draining_timeout = 400
+  tags {
+    Name = "${var.app}-${var.env}-web"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "web"
+  }
 }
 
 resource "aws_proxy_protocol_policy" "web" {

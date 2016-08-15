@@ -1,5 +1,4 @@
 resource "aws_db_instance" "micropost" {
-  identifier = "micropost-${var.env}"
   snapshot_identifier = "micropost-init"
   allocated_storage    = 5
   engine               = "mysql"
@@ -10,6 +9,11 @@ resource "aws_db_instance" "micropost" {
   vpc_security_group_ids = [
     "${aws_security_group.internal.id}",
   ]
+  tags {
+    Name = "${var.app}-${var.env}"
+    App = "${var.app}"
+    Env = "${var.env}"
+  }
 }
 
 resource "aws_db_subnet_group" "micropost" {

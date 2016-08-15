@@ -1,12 +1,12 @@
 resource "aws_iam_instance_profile" "web" {
-  name = "web-${var.env}"
+  name = "${var.app}-${var.env}-web"
   roles = [
     "${aws_iam_role.web.name}"
   ]
 }
 
 resource "aws_iam_role" "web" {
-  name = "web-${var.env}"
+  name = "${var.app}-${var.env}-web"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",

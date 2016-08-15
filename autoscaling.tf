@@ -2,7 +2,7 @@ data "template_file" "web_init" {
   template = "${file("templates/web_init.sh")}"
   vars {
     env = "${var.env}"
-    logserver_endpoint = "${aws_elasticsearch_domain.logserver.endpoint}"
+    logserver_endpoint = "${aws_elasticsearch_domain.micropost.endpoint}"
     rds_endpoint = "${aws_db_instance.micropost.endpoint}"
     redis_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}"
     web_endpoint = "${cloudflare_record.micropost.hostname}"
@@ -40,6 +40,26 @@ resource "aws_autoscaling_group" "web" {
     "${aws_subnet.public_secondary.id}",
   ]
   load_balancers = ["${aws_elb.web.name}"]
+  tag {
+    key = "Name"
+    value = "${var.app}-${var.env}-web"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "App"
+    value = "${var.app}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "Env"
+    value = "${var.env}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "Role"
+    value = "web"
+    propagate_at_launch = true
+  }
 }
 
 resource "aws_autoscaling_policy" "web_scale_out" {
