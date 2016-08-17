@@ -107,3 +107,88 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   }
   alarm_actions = ["${aws_autoscaling_policy.web_scale_in.arn}"]
 }
+
+resource "aws_iam_instance_profile" "web" {
+  name = "${var.app}-${var.env}-web"
+  roles = [
+    "${aws_iam_role.web.name}"
+  ]
+}
+
+resource "aws_iam_role" "web" {
+  name = "${var.app}-${var.env}-web"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "es_client" {
+  name = "es-client"
+  role = "${aws_iam_role.web.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "es:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "letsencrypt_cache_client" {
+  name = "letsencrypt-cache-client"
+  role = "${aws_iam_role.web.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:Put*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "codedeploy_client" {
+  name = "codedeploy-client"
+  role = "${aws_iam_role.web.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
