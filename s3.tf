@@ -16,3 +16,8 @@ resource "aws_s3_bucket" "deploy" {
     Env = "${var.env}"
   }
 }
+
+resource "aws_s3_bucket" "backup" {
+  bucket = "backup-${var.env}.hana053.com"
+  force_destroy = true
+}
