@@ -13,7 +13,7 @@ module "webservers" {
   hostname = "${cloudflare_record.micropost.hostname}"
   logserver_endpoint = "${aws_elasticsearch_domain.micropost.endpoint}"
   dbserver_endpoint = "${aws_db_instance.micropost.endpoint}"
-  cacheserver_endpoint = "${aws_elasticache_cluster.micropost.cache_nodes.0.address}"
+  cacheserver_endpoint = "${module.cacheservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   deploy_bucket_arn = "${aws_s3_bucket.deploy.arn}"
   key_name = "${aws_key_pair.micropost.key_name}"
@@ -41,4 +41,14 @@ module "bastion" {
     "${aws_security_group.internal.id}",
   ]
   key_name = "${aws_key_pair.micropost.key_name}"
+}
+
+module "cacheservers" {
+  source = "./cacheservers"
+  security_groups = [
+    "${aws_security_group.internal.id}",
+  ]
+  subnets = [
+    "${module.vpc.private_subnets}",
+  ]
 }
