@@ -40,6 +40,6 @@ after_success:
   # Replace instances if web_ami was updated.
   - terraform output | tee out_after
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
-  - asg_name=$(terraform output web_autoscaling_group_name)
+  - asg_name=$(terraform output web_asg_name)
   - test ${lines} -eq 2 && bundle exec ruby scripts/replace_old_instances.rb ${asg_name}
 

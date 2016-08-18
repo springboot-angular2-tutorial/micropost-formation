@@ -5,9 +5,9 @@ ENV_FILE=/opt/micropost/env.sh
 mkdir -p $(dirname $${ENV_FILE})
 cat << EOF > $${ENV_FILE}
 export SPRING_PROFILES_ACTIVE=${env}
-export RDS_ENDPOINT=${rds_endpoint}
-export REDIS_ENDPOINT=${redis_endpoint}
-export S3_DEPLOY_BUCKET=${s3_deploy_bucket}
+export RDS_ENDPOINT=${dbserver_endpoint}
+export REDIS_ENDPOINT=${cacheserver_endpoint}
+export S3_DEPLOY_BUCKET=${deploy_bucket}
 EOF
 
 # Finalize provisioning by using resolved endpoints.
@@ -19,7 +19,7 @@ cat << EOF > inventory
 localhost
 EOF
 
-ansible-playbook -i inventory -c local --tags configuration,deploy --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "letsencrypt_host=${web_endpoint}" -e "deploy_bucket=${s3_deploy_bucket}" site.yml
+ansible-playbook -i inventory -c local --tags configuration,deploy --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "letsencrypt_host=${hostname}" -e "deploy_bucket=${deploy_bucket}" site.yml
 )
 
 # Update SSL cert

@@ -1,11 +1,11 @@
 output "web_ami" {
-  value = "${data.aws_ami.web.id}"
+  value = "${module.webservers.ami}"
 }
 
 output "web_desired_capacity" {
-  value = "${aws_autoscaling_group.web.desired_capacity}"
+  value = "${module.webservers.desired_capacity}"
 }
 
-output "web_autoscaling_group_name" {
-  value = "${aws_autoscaling_group.web.name}"
+output "web_asg_name" {
+  value = "${module.webservers.asg_name}"
 }
