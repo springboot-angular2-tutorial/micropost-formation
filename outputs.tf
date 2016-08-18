@@ -1,5 +1,5 @@
 output "web_ami" {
-  value = "${data.aws_ami.micropost_web.id}"
+  value = "${data.aws_ami.web.id}"
 }
 
 output "web_desired_capacity" {

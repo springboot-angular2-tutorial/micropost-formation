@@ -19,8 +19,5 @@ resource "aws_db_instance" "micropost" {
 resource "aws_db_subnet_group" "micropost" {
   name = "micropost-${var.env}"
   description = "Our main group of subnets"
-  subnet_ids = [
-    "${aws_subnet.private_primary.id}",
-    "${aws_subnet.private_secondary.id}",
-  ]
+  subnet_ids = ["${module.vpc.private_subnets}"]
 }

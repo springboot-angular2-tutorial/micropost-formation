@@ -1,3 +1,23 @@
+variable "web_min_size" {
+  default = 1
+}
+
+variable "web_desired_capacity" {
+  default = 1
+}
+
+data "aws_ami" "web" {
+  most_recent = true
+  owners = [
+    "self"]
+
+  filter {
+    name = "tag:Name"
+    values = [
+      "micropost-web"]
+  }
+}
+
 data "template_file" "web_init" {
   template = "${file("templates/web_init.sh")}"
   vars {
@@ -12,7 +32,7 @@ data "template_file" "web_init" {
 
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-${var.env}-"
-  image_id = "${data.aws_ami.micropost_web.id}"
+  image_id = "${data.aws_ami.web.id}"
   instance_type = "t2.micro"
   security_groups = [
     "${aws_security_group.internal.id}",
@@ -30,16 +50,14 @@ resource "aws_autoscaling_group" "web" {
   name = "web-${var.env}"
   launch_configuration = "${aws_launch_configuration.web.id}"
   max_size = 4
-  min_size = 1
+  min_size = "${var.web_min_size}"
   desired_capacity = "${var.web_desired_capacity}"
   health_check_grace_period = 300
   health_check_type = "ELB"
   force_delete = true
-  vpc_zone_identifier = [
-    "${aws_subnet.public_primary.id}",
-    "${aws_subnet.public_secondary.id}",
-  ]
-  load_balancers = ["${aws_elb.web.name}"]
+  vpc_zone_identifier = ["${module.vpc.public_subnets}"]
+  load_balancers = [
+    "${aws_elb.web.name}"]
   tag {
     key = "Name"
     value = "${var.app}-${var.env}-web"
@@ -82,7 +100,8 @@ resource "aws_cloudwatch_metric_alarm" "web_gte_threshold" {
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
   }
-  alarm_actions = ["${aws_autoscaling_policy.web_scale_out.arn}"]
+  alarm_actions = [
+    "${aws_autoscaling_policy.web_scale_out.arn}"]
 }
 
 resource "aws_autoscaling_policy" "web_scale_in" {
@@ -105,7 +124,8 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   dimensions {
     AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
   }
-  alarm_actions = ["${aws_autoscaling_policy.web_scale_in.arn}"]
+  alarm_actions = [
+    "${aws_autoscaling_policy.web_scale_in.arn}"]
 }
 
 resource "aws_iam_instance_profile" "web" {
@@ -166,7 +186,7 @@ resource "aws_iam_role_policy" "letsencrypt_cache_client" {
         "s3:Put*"
       ],
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "${aws_s3_bucket.deploy.arn}/*"
     }
   ]
 }
@@ -186,9 +206,55 @@ resource "aws_iam_role_policy" "codedeploy_client" {
         "s3:List*"
       ],
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "${aws_s3_bucket.deploy.arn}/*"
     }
   ]
 }
 EOF
+}
+
+resource "aws_elb" "web" {
+  name = "${var.app}-${var.env}-web"
+  subnets = ["${module.vpc.public_subnets}"]
+  security_groups = [
+    "${aws_security_group.internal.id}",
+    "${aws_security_group.http.id}",
+    "${aws_security_group.https.id}",
+  ]
+  // use for health check
+  listener {
+    instance_port = 80
+    instance_protocol = "http"
+    lb_port = 80
+    lb_protocol = "http"
+  }
+  listener {
+    instance_port = 443
+    instance_protocol = "tcp"
+    lb_port = 443
+    lb_protocol = "tcp"
+  }
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    timeout = 5
+    target = "HTTP:80/manage/health"
+    interval = 30
+  }
+  cross_zone_load_balancing = true
+  idle_timeout = 400
+  connection_draining = true
+  connection_draining_timeout = 400
+  tags {
+    Name = "${var.app}-${var.env}-web"
+    App = "${var.app}"
+    Env = "${var.env}"
+    Role = "web"
+  }
+}
+
+resource "aws_proxy_protocol_policy" "web" {
+  load_balancer = "${aws_elb.web.name}"
+  instance_ports = [
+    "443"]
 }

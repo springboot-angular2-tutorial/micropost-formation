@@ -20,8 +20,5 @@ resource "aws_elasticache_cluster" "micropost" {
 resource "aws_elasticache_subnet_group" "micropost" {
   name = "micropost-${var.env}"
   description = "main subnet group"
-  subnet_ids = [
-    "${aws_subnet.private_primary.id}",
-    "${aws_subnet.private_secondary.id}",
-  ]
+  subnet_ids = ["${module.vpc.private_subnets}"]
 }

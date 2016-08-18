@@ -3,6 +3,8 @@
 . $(dirname $0)/terraform-enable-remote.sh
 . $(dirname $0)/export-tfvars.sh
 
+terraform get
+
 terraform $@ \
   -state="${ENV}.tfstate" \
   -refresh=true \

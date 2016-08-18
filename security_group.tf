@@ -1,5 +1,5 @@
 resource "aws_security_group" "internal" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${module.vpc.vpc_id}"
   name_prefix = "internal-"
   description = "Allow internal traffic"
   ingress {
@@ -28,7 +28,7 @@ resource "aws_security_group" "internal" {
 }
 
 resource "aws_security_group" "ssh" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${module.vpc.vpc_id}"
   name_prefix = "ssh-"
   description = "Allow ssh inbound traffic"
   ingress {
@@ -60,7 +60,7 @@ resource "aws_security_group" "ssh" {
 }
 
 resource "aws_security_group" "http" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${module.vpc.vpc_id}"
   name_prefix = "http-"
   description = "Allow http inbound traffic"
   ingress {
@@ -91,7 +91,7 @@ resource "aws_security_group" "http" {
 }
 
 resource "aws_security_group" "https" {
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${module.vpc.vpc_id}"
   name_prefix = "https-"
   description = "Allow https inbound traffic"
   ingress {
