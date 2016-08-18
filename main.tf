@@ -75,3 +75,10 @@ module "logservers" {
   backup_backet = "${aws_s3_bucket.backup.bucket}"
   backup_backet_arn = "${aws_s3_bucket.backup.arn}"
 }
+
+module "web_codedeploy" {
+  source = "./codedeploy"
+  name = "micropost"
+  group_name = "web"
+  autoscaling_groups = ["${module.webservers.asg_id}"]
+}

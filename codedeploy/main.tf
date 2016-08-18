@@ -1,17 +1,17 @@
 resource "aws_codedeploy_app" "main" {
-  name = "${var.app}-${var.env}"
+  name = "${var.name}"
 }
 
-resource "aws_codedeploy_deployment_group" "web" {
+resource "aws_codedeploy_deployment_group" "main" {
   app_name = "${aws_codedeploy_app.main.name}"
-  deployment_group_name = "web"
+  deployment_group_name = "${var.group_name}"
   service_role_arn = "${aws_iam_role.codedeploy_service.arn}"
-  autoscaling_groups = ["${module.webservers.asg_id}"]
+  autoscaling_groups = ["${var.autoscaling_groups}"]
   deployment_config_name = "CodeDeployDefault.OneAtATime"
 }
 
 resource "aws_iam_role" "codedeploy_service" {
-  name = "${var.app}-${var.env}-codedeploy-service"
+  name = "codedeploy-${var.group_name}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
