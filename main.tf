@@ -32,3 +32,13 @@ module "webservers" {
     "${aws_security_group.https.id}",
   ]
 }
+
+module "bastion" {
+  source = "./bastion"
+  subnet_id = "${module.vpc.public_subnets[0]}"
+  security_groups = [
+    "${aws_security_group.ssh.id}",
+    "${aws_security_group.internal.id}",
+  ]
+  key_name = "${aws_key_pair.micropost.key_name}"
+}
