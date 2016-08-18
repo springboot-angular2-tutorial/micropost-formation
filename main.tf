@@ -12,7 +12,7 @@ module "webservers" {
   env = "${var.env}"
   hostname = "${cloudflare_record.micropost.hostname}"
   logserver_endpoint = "${aws_elasticsearch_domain.micropost.endpoint}"
-  dbserver_endpoint = "${aws_db_instance.micropost.endpoint}"
+  dbserver_endpoint = "${module.dbservers.endpoint}"
   cacheserver_endpoint = "${module.cacheservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   deploy_bucket_arn = "${aws_s3_bucket.deploy.arn}"
@@ -51,4 +51,15 @@ module "cacheservers" {
   subnets = [
     "${module.vpc.private_subnets}",
   ]
+}
+
+module "dbservers" {
+  source = "./dbservers"
+  security_groups = [
+    "${aws_security_group.internal.id}",
+  ]
+  subnets = [
+    "${module.vpc.private_subnets}",
+  ]
+  snapshot_identifier = "micropost-init"
 }

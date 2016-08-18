@@ -1,5 +1,5 @@
-resource "aws_elasticache_cluster" "cacheservers" {
-  cluster_id = "cacheservers"
+resource "aws_elasticache_cluster" "main" {
+  cluster_id = "main"
   engine = "redis"
   engine_version = "2.8.24"
   node_type = "cache.t2.micro"
@@ -9,11 +9,11 @@ resource "aws_elasticache_cluster" "cacheservers" {
   security_group_ids = [
     "${var.security_groups}",
   ]
-  subnet_group_name = "${aws_elasticache_subnet_group.cacheservers.name}"
+  subnet_group_name = "${aws_elasticache_subnet_group.main.name}"
 }
 
-resource "aws_elasticache_subnet_group" "cacheservers" {
-  name = "cacheservers"
+resource "aws_elasticache_subnet_group" "main" {
+  name = "main"
   description = "main subnet group"
   subnet_ids = [
     "${var.subnets}"
