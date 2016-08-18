@@ -11,7 +11,7 @@ module "webservers" {
   source = "./webservers"
   env = "${var.env}"
   hostname = "${cloudflare_record.micropost.hostname}"
-  logserver_endpoint = "${aws_elasticsearch_domain.micropost.endpoint}"
+  logserver_endpoint = "${module.logservers.endpoint}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
   cacheserver_endpoint = "${module.cacheservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
@@ -31,6 +31,8 @@ module "webservers" {
     "${aws_security_group.http.id}",
     "${aws_security_group.https.id}",
   ]
+  min_scale_size = "${var.web_min_size}"
+  desired_capacity = "${var.web_desired_capacity}"
 }
 
 module "bastion" {
@@ -62,4 +64,14 @@ module "dbservers" {
     "${module.vpc.private_subnets}",
   ]
   snapshot_identifier = "micropost-init"
+}
+
+module "logservers" {
+  source = "./logservers"
+  aws_account_id = "${var.aws_account_id}"
+  aws_region = "${var.aws_region}"
+  allowed_segments = "${var.allowed_segments}"
+  backup_repository = "micropost-log-backups"
+  backup_backet = "${aws_s3_bucket.backup.bucket}"
+  backup_backet_arn = "${aws_s3_bucket.backup.arn}"
 }

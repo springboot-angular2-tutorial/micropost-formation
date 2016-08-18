@@ -1,9 +1,5 @@
-variable "es_backup_repository" {
-  default = "micropost-log-backups"
-}
-
-resource "aws_elasticsearch_domain" "micropost" {
-  domain_name = "${var.app}-${var.env}"
+resource "aws_elasticsearch_domain" "main" {
+  domain_name = "main"
   access_policies = <<CONFIG
 {
   "Version": "2012-10-17",
@@ -14,7 +10,7 @@ resource "aws_elasticsearch_domain" "micropost" {
         "AWS": "arn:aws:iam::${var.aws_account_id}:root"
       },
       "Effect": "Allow",
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/micropost-${var.env}/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/main/*"
     },
     {
       "Action": "es:*",
@@ -22,10 +18,10 @@ resource "aws_elasticsearch_domain" "micropost" {
       "Effect": "Allow",
       "Condition": {
         "IpAddress": {
-          "aws:SourceIp": "${var.segment["office"]}"
+          "aws:SourceIp": ${jsonencode(var.allowed_segments)}
         }
       },
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/micropost-${var.env}/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/main/*"
     }
   ]
 }
@@ -42,26 +38,21 @@ CONFIG
     volume_size = 10
     volume_type = "gp2"
   }
-  tags {
-    Name = "${var.app}-${var.env}"
-    App = "${var.app}"
-    Env = "${var.env}"
-  }
   provisioner "local-exec" {
     command = <<EOF
       ruby scripts/es_register_snapshot_directory.rb \
-        --host=${aws_elasticsearch_domain.micropost.endpoint} \
-        --repository=${var.es_backup_repository} \
+        --host=${aws_elasticsearch_domain.main.endpoint} \
+        --repository=${var.backup_repository} \
         --region=${var.aws_region} \
-        --bucket=${aws_s3_bucket.backup.bucket} \
-        --role_arn="${aws_iam_role.logbackup.arn}" \
-        --base_path=${var.es_backup_repository}
+        --bucket=${var.backup_backet} \
+        --role_arn="${aws_iam_role.backup.arn}" \
+        --base_path=${var.backup_repository}
 EOF
   }
 }
 
-resource "aws_iam_role" "logbackup" {
-  name = "${var.app}-${var.env}-logbackup"
+resource "aws_iam_role" "backup" {
+  name = "logserver-backup"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -79,9 +70,9 @@ resource "aws_iam_role" "logbackup" {
 EOF
 }
 
-resource "aws_iam_role_policy" "logbackup" {
-  name = "logbackup-client"
-  role = "${aws_iam_role.logbackup.id}"
+resource "aws_iam_role_policy" "backup" {
+  name = "logserver-backup"
+  role = "${aws_iam_role.backup.id}"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -91,7 +82,7 @@ resource "aws_iam_role_policy" "logbackup" {
         "s3:ListBucket"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.backup.arn}"
+      "Resource": "${var.backup_backet_arn}"
     },
     {
       "Action": [
@@ -101,7 +92,7 @@ resource "aws_iam_role_policy" "logbackup" {
         "iam:PassRole"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.backup.arn}/*"
+      "Resource": "${var.backup_backet_arn}/*"
     }
   ]
 }
