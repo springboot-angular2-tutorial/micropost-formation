@@ -2,7 +2,7 @@
 
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then
-  desired_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name web | jq '.AutoScalingGroups[0].DesiredCapacity')
+  desired_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${asg_name} | jq '.AutoScalingGroups[0].DesiredCapacity')
   echo "Current desired capacity is ${desired_capacity}."
   # respect current desired capacity
   export TF_VAR_web_desired_capacity="${desired_capacity}"
