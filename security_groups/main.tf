@@ -1,5 +1,5 @@
 resource "aws_security_group" "internal" {
-  vpc_id = "${module.vpc.vpc_id}"
+  vpc_id = "${var.vpc_id}"
   name_prefix = "internal-"
   description = "Allow internal traffic"
   ingress {
@@ -20,15 +20,12 @@ resource "aws_security_group" "internal" {
     create_before_destroy = true
   }
   tags {
-    Name = "${var.app}-${var.env}-internal"
-    App = "${var.app}"
-    Env = "${var.env}"
-    Role = "internal"
+    Name = "internal"
   }
 }
 
-resource "aws_security_group" "ssh" {
-  vpc_id = "${module.vpc.vpc_id}"
+resource "aws_security_group" "internet_in_ssh" {
+  vpc_id = "${var.vpc_id}"
   name_prefix = "ssh-"
   description = "Allow ssh inbound traffic"
   ingress {
@@ -36,7 +33,7 @@ resource "aws_security_group" "ssh" {
     to_port = 22
     protocol = "tcp"
     cidr_blocks = [
-      "${var.allowed_segments}"
+      "${var.ssh_allowed_segments}"
     ]
   }
   egress {
@@ -51,15 +48,12 @@ resource "aws_security_group" "ssh" {
     create_before_destroy = true
   }
   tags {
-    Name = "${var.app}-${var.env}-ssh"
-    App = "${var.app}"
-    Env = "${var.env}"
-    Role = "ssh"
+    Name = "internet-in-ssh"
   }
 }
 
-resource "aws_security_group" "http" {
-  vpc_id = "${module.vpc.vpc_id}"
+resource "aws_security_group" "internet_in_http" {
+  vpc_id = "${var.vpc_id}"
   name_prefix = "http-"
   description = "Allow http inbound traffic"
   ingress {
@@ -82,15 +76,12 @@ resource "aws_security_group" "http" {
     create_before_destroy = true
   }
   tags {
-    Name = "${var.app}-${var.env}-http"
-    App = "${var.app}"
-    Env = "${var.env}"
-    Role = "http"
+    Name = "internet-in-http"
   }
 }
 
-resource "aws_security_group" "https" {
-  vpc_id = "${module.vpc.vpc_id}"
+resource "aws_security_group" "internet_in_https" {
+  vpc_id = "${var.vpc_id}"
   name_prefix = "https-"
   description = "Allow https inbound traffic"
   ingress {
@@ -113,9 +104,6 @@ resource "aws_security_group" "https" {
     create_before_destroy = true
   }
   tags {
-    Name = "${var.app}-${var.env}-https"
-    App = "${var.app}"
-    Env = "${var.env}"
-    Role = "https"
+    Name = "internet-in-https"
   }
 }

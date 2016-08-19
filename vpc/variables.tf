@@ -25,7 +25,3 @@ variable "azs" {
     "ap-northeast-1c",
   ]
 }
-
-variable "region" {
-  default = "ap-northeast-1"
-}

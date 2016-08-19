@@ -4,11 +4,11 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
-  region = "${var.aws_region}"
 }
 
 module "webservers" {
   source = "./webservers"
+
   env = "${var.env}"
   hostname = "${cloudflare_record.micropost.hostname}"
   logserver_endpoint = "${module.logservers.endpoint}"
@@ -21,15 +21,15 @@ module "webservers" {
     "${module.vpc.public_subnets}"
   ]
   web_security_groups = [
-    "${aws_security_group.internal.id}",
+    "${module.security_groups.internal}",
   ]
   elb_subnets = [
     "${module.vpc.public_subnets}"
   ]
   elb_security_groups = [
-    "${aws_security_group.internal.id}",
-    "${aws_security_group.http.id}",
-    "${aws_security_group.https.id}",
+    "${module.security_groups.internal}",
+    "${module.security_groups.internet_in_http}",
+    "${module.security_groups.internet_in_https}",
   ]
   min_scale_size = "${var.web_min_size}"
   desired_capacity = "${var.web_desired_capacity}"
@@ -39,8 +39,8 @@ module "bastion" {
   source = "./bastion"
   subnet_id = "${module.vpc.public_subnets[0]}"
   security_groups = [
-    "${aws_security_group.ssh.id}",
-    "${aws_security_group.internal.id}",
+    "${module.security_groups.internal}",
+    "${module.security_groups.internet_in_ssh}",
   ]
   key_name = "${aws_key_pair.micropost.key_name}"
 }
@@ -48,7 +48,7 @@ module "bastion" {
 module "cacheservers" {
   source = "./cacheservers"
   security_groups = [
-    "${aws_security_group.internal.id}",
+    "${module.security_groups.internal}",
   ]
   subnets = [
     "${module.vpc.private_subnets}",
@@ -58,7 +58,7 @@ module "cacheservers" {
 module "dbservers" {
   source = "./dbservers"
   security_groups = [
-    "${aws_security_group.internal.id}",
+    "${module.security_groups.internal}",
   ]
   subnets = [
     "${module.vpc.private_subnets}",
@@ -81,4 +81,10 @@ module "web_codedeploy" {
   name = "micropost"
   group_name = "web"
   autoscaling_groups = ["${module.webservers.asg_id}"]
+}
+
+module "security_groups" {
+  source = "./security_groups"
+  vpc_id = "${module.vpc.vpc_id}"
+  ssh_allowed_segments = ["${var.allowed_segments}"]
 }
