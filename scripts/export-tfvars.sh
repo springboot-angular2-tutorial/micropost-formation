@@ -8,9 +8,10 @@ if [ -n "${asg_name}" ]; then
   export TF_VAR_web_desired_capacity="${desired_capacity}"
 fi
 
-if [ "${ENV}" = "prod" ]; then
-  # prod is special
-  export TF_VAR_web_host_name="micropost"
-else
-  export TF_VAR_web_host_name="micropost-${ENV}"
-fi
+#if [ "${ENV}" = "prod" ]; then
+#  # prod is special
+#  export TF_VAR_web_host_name="micropost"
+#else
+#  export TF_VAR_web_host_name="micropost-${ENV}"
+#fi
+export TF_VAR_web_host_name="micropost-${ENV}"

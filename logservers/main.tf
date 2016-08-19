@@ -18,7 +18,7 @@ resource "aws_elasticsearch_domain" "main" {
       "Effect": "Allow",
       "Condition": {
         "IpAddress": {
-          "aws:SourceIp": ${jsonencode(var.allowed_segments)}
+          "aws:SourceIp": "${var.allowed_segments[0]}"
         }
       },
       "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/main/*"
