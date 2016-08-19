@@ -30,12 +30,6 @@ resource "aws_elb" "web" {
   idle_timeout = 400
   connection_draining = true
   connection_draining_timeout = 400
-  //  tags {
-  //    Name = "${var.app}-${var.env}-web"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //    Role = "web"
-  //  }
 }
 
 resource "aws_proxy_protocol_policy" "web" {

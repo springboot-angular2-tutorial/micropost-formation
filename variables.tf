@@ -13,7 +13,6 @@ variable "aws_region" {
 variable "allowed_segments" {
   default = [
     "42.116.5.4/32",
-    "171.232.52.48/32",
   ]
 }
 

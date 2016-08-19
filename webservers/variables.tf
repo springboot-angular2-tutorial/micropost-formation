@@ -38,6 +38,9 @@ variable "key_name" {
   description = "SSH key name for web servers"
 }
 
+variable "web_ami_tag" {
+}
+
 variable "web_subnets" {
   description = "Subnets for web servers"
   default = []

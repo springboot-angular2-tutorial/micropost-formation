@@ -6,7 +6,7 @@ data "aws_ami" "web" {
   filter {
     name = "tag:Name"
     values = [
-      "micropost-web"
+      "${var.web_ami_tag}"
     ]
   }
 }

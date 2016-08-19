@@ -1,19 +1,15 @@
 resource "aws_vpc" "main" {
   cidr_block = "${var.cidr}"
-  //  tags {
-  //    Name = "${var.app}-${var.env}"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //  }
+  tags {
+    Name = "${var.name}"
+  }
 }
 
 resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.main.id}"
-  //  tags {
-  //    Name = "${var.app}-${var.env}"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //  }
+  tags {
+    Name = "${var.name}"
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -22,11 +18,9 @@ resource "aws_route_table" "public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.main.id}"
   }
-  //  tags {
-  //    Name = "${var.app}-${var.env}"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //  }
+  tags {
+    Name = "${var.name}"
+  }
 }
 
 resource "aws_subnet" "public" {
@@ -35,11 +29,9 @@ resource "aws_subnet" "public" {
   cidr_block = "${var.public_subnets[count.index]}"
   availability_zone = "${var.azs[count.index]}"
   map_public_ip_on_launch = true
-  //  tags {
-  //    Name = "${var.app}-${var.env}-public1"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //  }
+  tags {
+    Name = "${var.name}-public"
+  }
 }
 
 resource "aws_route_table_association" "puclic" {
@@ -53,10 +45,8 @@ resource "aws_subnet" "private" {
   vpc_id = "${aws_vpc.main.id}"
   cidr_block = "${var.private_subnets[count.index]}"
   availability_zone = "${var.azs[count.index]}"
-  //  tags {
-  //    Name = "${var.app}-${var.env}-private3"
-  //    App = "${var.app}"
-  //    Env = "${var.env}"
-  //  }
+  tags {
+    Name = "${var.name}-private"
+  }
 }
 

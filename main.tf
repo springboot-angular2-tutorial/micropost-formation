@@ -4,11 +4,11 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
+  name = "micropost"
 }
 
 module "webservers" {
   source = "./webservers"
-
   env = "${var.env}"
   hostname = "${cloudflare_record.micropost.hostname}"
   logserver_endpoint = "${module.logservers.endpoint}"
@@ -17,6 +17,7 @@ module "webservers" {
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   deploy_bucket_arn = "${aws_s3_bucket.deploy.arn}"
   key_name = "${aws_key_pair.micropost.key_name}"
+  web_ami_tag = "micropost-web"
   web_subnets = [
     "${module.vpc.public_subnets}"
   ]
