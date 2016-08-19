@@ -11,6 +11,11 @@ cache:
 install:
   - gem install travis -v 1.8.2 --no-rdoc --no-ri
   - bundle install
+  # install aws cli
+  - sudo apt-get -y install python-pip
+  - sudo pip install awscli
+  - aws --version
+  # install terraform
   - wget https://releases.hashicorp.com/terraform/0.7.0/terraform_0.7.0_linux_amd64.zip -O /tmp/terraform.zip
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
