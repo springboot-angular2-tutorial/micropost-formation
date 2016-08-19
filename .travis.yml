@@ -30,7 +30,7 @@ after_success:
   - test -z "${ENV}" && (echo "${TRAVIS_BRANCH} is not a branch to deploy." && exit 0)
 
   # Switch AWS Role when ENV is prod
-  - test "${ENV}" = "prod" && source scripts/switch_production_role.sh
+  - test "${ENV}" = "prod" && source scripts/switch-production-role.sh
 
   # Enable terraform remote
   - scripts/terraform-enable-remote.sh
