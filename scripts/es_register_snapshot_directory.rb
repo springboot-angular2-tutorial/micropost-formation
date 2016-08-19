@@ -10,7 +10,8 @@ conn = Faraday.new(url: "https://#{option[:host]}") do |faraday|
   faraday.request :aws_signers_v4,
                   credentials: Aws::Credentials.new(
                     ENV['AWS_ACCESS_KEY_ID'],
-                    ENV['AWS_SECRET_ACCESS_KEY']
+                    ENV['AWS_SECRET_ACCESS_KEY'],
+                    ENV['AWS_SESSION_TOKEN']
                   ),
                   service_name: 'es',
                   region: option[:region]
