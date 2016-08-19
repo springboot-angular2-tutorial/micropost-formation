@@ -11,3 +11,7 @@ export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 
 export CLOUDFLARE_EMAIL=
 export CLOUDFLARE_TOKEN=
+
+export PROD_ROLE_ARN=
+
+unset AWS_SESSION_TOKEN
