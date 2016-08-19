@@ -3,6 +3,7 @@ variable "env" {
   default = "dev"
 }
 
+// TODO can be acquired from data in Terraform 0.7.1
 variable "aws_account_id" {
 }
 variable "aws_region" {
@@ -14,6 +15,10 @@ variable "allowed_segments" {
     "42.116.5.4/32",
     "171.232.52.48/32",
   ]
+}
+
+variable "domain" {
+  default = "hana053.com"
 }
 
 variable "web_host_name" {

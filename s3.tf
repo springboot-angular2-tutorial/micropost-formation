@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "deploy" {
-  bucket = "deploy-${var.env}.hana053.com"
+  bucket = "deploy-${var.env}.${var.domain}"
   force_destroy = true
   // evict letsencrypt cert
   lifecycle_rule {
@@ -13,6 +13,6 @@ resource "aws_s3_bucket" "deploy" {
 }
 
 resource "aws_s3_bucket" "backup" {
-  bucket = "backup-${var.env}.hana053.com"
+  bucket = "backup-${var.env}.${var.domain}"
   force_destroy = true
 }
