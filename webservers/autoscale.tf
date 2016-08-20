@@ -42,7 +42,7 @@ resource "aws_launch_configuration" "web" {
 resource "aws_autoscaling_group" "web" {
   name = "web"
   launch_configuration = "${aws_launch_configuration.web.id}"
-  max_size = 4
+  max_size = 2
   min_size = "${var.min_scale_size}"
   desired_capacity = "${var.desired_capacity}"
   health_check_grace_period = 300
