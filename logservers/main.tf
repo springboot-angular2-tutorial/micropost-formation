@@ -1,5 +1,5 @@
 resource "aws_elasticsearch_domain" "main" {
-  domain_name = "main"
+  domain_name = "main2"
   elasticsearch_version = "2.3"
   access_policies = <<CONFIG
 {
