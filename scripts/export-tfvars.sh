@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb '*.hana053.com')
+
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then
   desired_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${asg_name} | jq '.AutoScalingGroups[0].DesiredCapacity')

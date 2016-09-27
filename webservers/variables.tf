@@ -42,21 +42,25 @@ variable "web_ami_tag" {
 }
 
 variable "web_subnets" {
+  type = "list"
   description = "Subnets for web servers"
   default = []
 }
 
 variable "web_security_groups" {
+  type = "list"
   description = "Security groups for web servers"
   default = []
 }
 
 variable "alb_subnets" {
+  type = "list"
   description = "Subnets for alb"
   default = []
 }
 
 variable "alb_security_groups" {
+  type = "list"
   description = "Security groups for alb"
   default = []
 }
