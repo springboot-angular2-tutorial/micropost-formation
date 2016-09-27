@@ -9,7 +9,7 @@ resource "aws_alb" "web" {
   ]
   enable_deletion_protection = true
   access_logs {
-    bucket = "${aws_s3_bucket.log.bucket}"
+    bucket = "${var.log_bucket}"
     prefix = "alb-web"
   }
 }

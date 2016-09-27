@@ -2,6 +2,8 @@ provider "aws" {
   region = "${var.aws_region}"
 }
 
+data "aws_caller_identity" "current" {}
+
 module "vpc" {
   source = "./vpc"
   name = "micropost"
@@ -36,6 +38,7 @@ module "webservers" {
   min_scale_size = "${var.web_min_size}"
   desired_capacity = "${var.web_desired_capacity}"
   vpc_id = "${module.vpc.vpc_id}"
+  log_bucket = "${aws_s3_bucket.log.bucket}"
 }
 
 module "bastion" {

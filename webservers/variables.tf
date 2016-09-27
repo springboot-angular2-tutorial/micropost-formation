@@ -69,4 +69,6 @@ variable "vpc_id" {
   description = "vpc id for alb target group"
 }
 
-
+variable "log_bucket" {
+  description = "s3 bucket to save log"
+}
