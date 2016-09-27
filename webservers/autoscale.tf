@@ -51,24 +51,24 @@ resource "aws_autoscaling_group" "web" {
   vpc_zone_identifier = [
     "${var.web_subnets}"
   ]
-  load_balancers = [
-    "${aws_elb.web.name}"
+  target_group_arns = [
+    "${aws_alb_target_group.web.arn}"
   ]
-    tag {
-      key = "Name"
-      value = "${var.env}-web"
-      propagate_at_launch = true
-    }
-    tag {
-      key = "Env"
-      value = "${var.env}"
-      propagate_at_launch = true
-    }
-    tag {
-      key = "Role"
-      value = "web"
-      propagate_at_launch = true
-    }
+  tag {
+    key = "Name"
+    value = "${var.env}-web"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "Env"
+    value = "${var.env}"
+    propagate_at_launch = true
+  }
+  tag {
+    key = "Role"
+    value = "web"
+    propagate_at_launch = true
+  }
 }
 
 resource "aws_autoscaling_policy" "web_scale_out" {

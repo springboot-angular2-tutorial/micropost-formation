@@ -51,13 +51,22 @@ variable "web_security_groups" {
   default = []
 }
 
-variable "elb_subnets" {
-  description = "Subnets for elb"
+variable "alb_subnets" {
+  description = "Subnets for alb"
   default = []
 }
 
-variable "elb_security_groups" {
-  description = "Security groups for elb"
+variable "alb_security_groups" {
+  description = "Security groups for alb"
   default = []
 }
+
+variable "alb_certificate_arn" {
+  description = "alb certificate arn"
+}
+
+variable "vpc_id" {
+  description = "vpc id for alb target group"
+}
+
 

@@ -1,5 +1,5 @@
 output "dns_name" {
-  value = "${aws_elb.web.dns_name}"
+  value = "${aws_alb.web.dns_name}"
 }
 
 output "ami" {

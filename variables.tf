@@ -8,13 +8,18 @@ variable "aws_region" {
 }
 
 variable "allowed_segments" {
+  type = "list"
   default = [
     "42.116.5.4/32",
+    "118.69.191.34/32"
   ]
 }
 
 variable "domain" {
   default = "hana053.com"
+}
+
+variable "alb_certificate_arn" {
 }
 
 variable "web_host_name" {

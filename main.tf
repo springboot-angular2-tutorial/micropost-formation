@@ -24,16 +24,18 @@ module "webservers" {
   web_security_groups = [
     "${module.security_groups.internal}",
   ]
-  elb_subnets = [
+  alb_subnets = [
     "${module.vpc.public_subnets}"
   ]
-  elb_security_groups = [
+  alb_security_groups = [
     "${module.security_groups.internal}",
     "${module.security_groups.internet_in_http}",
     "${module.security_groups.internet_in_https}",
   ]
+  alb_certificate_arn = "${var.alb_certificate_arn}"
   min_scale_size = "${var.web_min_size}"
   desired_capacity = "${var.web_desired_capacity}"
+  vpc_id = "${module.vpc.vpc_id}"
 }
 
 module "bastion" {
