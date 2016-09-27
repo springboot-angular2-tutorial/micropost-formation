@@ -3,9 +3,6 @@ variable "env" {
   default = "dev"
 }
 
-// TODO can be acquired from data in Terraform 0.7.1
-variable "aws_account_id" {
-}
 variable "aws_region" {
   default = "ap-northeast-1"
 }

@@ -6,7 +6,6 @@ export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 export AWS_DEFAULT_REGION=
 
-export TF_VAR_aws_account_id=
 export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 
 export CLOUDFLARE_EMAIL=

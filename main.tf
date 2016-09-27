@@ -69,7 +69,6 @@ module "dbservers" {
 
 module "logservers" {
   source = "./logservers"
-  aws_account_id = "${var.aws_account_id}"
   aws_region = "${var.aws_region}"
   allowed_segments = "${var.allowed_segments}"
   backup_repository = "micropost-log-backups"

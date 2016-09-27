@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_elasticsearch_domain" "main" {
   domain_name = "main2"
   elasticsearch_version = "2.3"
@@ -8,10 +10,10 @@ resource "aws_elasticsearch_domain" "main" {
     {
       "Action": "es:*",
       "Principal": {
-        "AWS": "arn:aws:iam::${var.aws_account_id}:root"
+        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
       },
       "Effect": "Allow",
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/main/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/main/*"
     },
     {
       "Action": "es:*",
@@ -22,7 +24,7 @@ resource "aws_elasticsearch_domain" "main" {
           "aws:SourceIp": "${var.allowed_segments[0]}"
         }
       },
-      "Resource": "arn:aws:es:${var.aws_region}:${var.aws_account_id}:domain/main/*"
+      "Resource": "arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/main/*"
     }
   ]
 }
