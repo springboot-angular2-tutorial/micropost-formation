@@ -24,6 +24,7 @@ asg.set_desired_capacity(
   honor_cooldown: true,
 )
 
+# TODO use target group instead of elb
 is_all_in_service = lambda do
   asg.reload
   in_services = asg.load_balancers

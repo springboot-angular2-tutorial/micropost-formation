@@ -46,8 +46,8 @@ after_success:
   - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
 
   # Replace instances if web_ami was updated.
-  - terraform output | tee out_after
-  - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
-  - asg_name=$(terraform output web_asg_name)
-  - test ${lines} -eq 2 && bundle exec ruby scripts/replace_old_instances.rb ${asg_name}
+#  - terraform output | tee out_after
+#  - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
+#  - asg_name=$(terraform output web_asg_name)
+#  - test ${lines} -eq 2 && bundle exec ruby scripts/replace_old_instances.rb ${asg_name}
 
