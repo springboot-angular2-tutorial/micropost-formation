@@ -8,10 +8,10 @@ resource "aws_alb" "web" {
     "${var.alb_subnets}"
   ]
   enable_deletion_protection = true
-//  access_logs {
-//    bucket = "${aws_s3_bucket.log.bucket}"
-//    prefix = "test-alb"
-//  }
+  access_logs {
+    bucket = "${aws_s3_bucket.log.bucket}"
+    prefix = "alb-web"
+  }
 }
 
 resource "aws_alb_target_group" "web" {
