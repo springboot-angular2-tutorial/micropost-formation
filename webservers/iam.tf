@@ -43,6 +43,7 @@ resource "aws_iam_role_policy" "es" {
 EOF
 }
 
+// TODO delete
 resource "aws_iam_role_policy" "letsencrypt_cache" {
   name = "web-letsencrypt-cache"
   role = "${aws_iam_role.web.id}"

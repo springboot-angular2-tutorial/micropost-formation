@@ -30,10 +30,6 @@ variable "deploy_bucket" {
   description = "Bucket to be used for deployment"
 }
 
-variable "deploy_bucket_arn" {
-  description = "Bucket arn to be used for deployment"
-}
-
 variable "key_name" {
   description = "SSH key name for web servers"
 }

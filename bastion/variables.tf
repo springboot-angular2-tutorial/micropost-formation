@@ -3,6 +3,7 @@ variable "subnet_id" {
 }
 
 variable "security_groups" {
+  type = "list"
   description = "Security groups for bastion server"
   default = []
 }

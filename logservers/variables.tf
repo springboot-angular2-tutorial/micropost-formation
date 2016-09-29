@@ -2,6 +2,7 @@ variable "aws_region" {
 }
 
 variable "allowed_segments" {
+  type = "list"
   default = []
 }
 

@@ -17,7 +17,6 @@ module "webservers" {
   dbserver_endpoint = "${module.dbservers.endpoint}"
   cacheserver_endpoint = "${module.cacheservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
-  deploy_bucket_arn = "${aws_s3_bucket.deploy.arn}"
   key_name = "${aws_key_pair.micropost.key_name}"
   web_ami_tag = "micropost-web"
   web_subnets = [
