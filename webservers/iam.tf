@@ -43,27 +43,6 @@ resource "aws_iam_role_policy" "es" {
 EOF
 }
 
-// TODO delete
-resource "aws_iam_role_policy" "letsencrypt_cache" {
-  name = "web-letsencrypt-cache"
-  role = "${aws_iam_role.web.id}"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "s3:Get*",
-        "s3:Put*"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy" "codedeploy_client" {
   name = "web-codedeploy-client"
   role = "${aws_iam_role.web.id}"

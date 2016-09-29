@@ -40,15 +40,15 @@ module "webservers" {
   log_bucket = "${aws_s3_bucket.log.bucket}"
 }
 
-module "bastion" {
-  source = "./bastion"
-  subnet_id = "${module.vpc.public_subnets[0]}"
-  security_groups = [
-    "${module.security_groups.internal}",
-    "${module.security_groups.internet_in_ssh}",
-  ]
-  key_name = "${aws_key_pair.micropost.key_name}"
-}
+//module "bastion" {
+//  source = "./bastion"
+//  subnet_id = "${module.vpc.public_subnets[0]}"
+//  security_groups = [
+//    "${module.security_groups.internal}",
+//    "${module.security_groups.internet_in_ssh}",
+//  ]
+//  key_name = "${aws_key_pair.micropost.key_name}"
+//}
 
 module "cacheservers" {
   source = "./cacheservers"
