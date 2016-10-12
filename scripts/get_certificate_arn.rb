@@ -1,14 +1,12 @@
 require 'aws-sdk'
+require 'optparse'
 
-unless ARGV[0]
-  puts 'Specify domain name.'
-  exit 1
-end
-DOMAIN_NAME = ARGV[0]
+option = ARGV.getopts(nil, 'domain:', 'region:')
+           .inject({}) { |hash, (k, v)| hash[k.to_sym] = v; hash }
 
-acm = Aws::ACM::Client.new
+acm = Aws::ACM::Client.new(region: option[:region])
 puts acm.list_certificates
        .certificate_summary_list
-       .select { |c| c.domain_name == DOMAIN_NAME }
+       .select { |c| c.domain_name == option[:domain] }
        .map(&:certificate_arn)
        .first

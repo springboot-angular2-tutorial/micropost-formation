@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb '*.hana053.com')
+export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb --domain "*.hana053.com" --region ${AWS_DEFAULT_REGION})
+export TF_VAR_cf_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb  --domain "*.hana053.com" --region "us-east-1")
 
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then

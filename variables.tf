@@ -20,6 +20,11 @@ variable "domain" {
 }
 
 variable "alb_certificate_arn" {
+  description = "ACM certificate arn for ALB"
+}
+
+variable "cf_certificate_arn" {
+  description = "ACM certificate arn for CloudFront. This certificate must be in us-east-1."
 }
 
 variable "web_host_name" {

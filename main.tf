@@ -12,7 +12,6 @@ module "vpc" {
 module "webservers" {
   source = "./webservers"
   env = "${var.env}"
-  hostname = "${cloudflare_record.micropost.hostname}"
   logserver_endpoint = "${module.logservers.endpoint}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
   cacheserver_endpoint = "${module.cacheservers.endpoint}"
@@ -38,6 +37,12 @@ module "webservers" {
   desired_capacity = "${var.web_desired_capacity}"
   vpc_id = "${module.vpc.vpc_id}"
   log_bucket = "${aws_s3_bucket.log.bucket}"
+}
+
+module "cdn" {
+  source = "./cdn"
+  domain = "${var.web_host_name}.${var.domain}"
+  certificate_arn = "${var.cf_certificate_arn}"
 }
 
 //module "bastion" {

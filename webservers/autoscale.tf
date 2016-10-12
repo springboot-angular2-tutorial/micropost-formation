@@ -15,7 +15,6 @@ data "template_file" "web_init" {
   template = "${file("./webservers/web_init.sh")}"
   vars {
     env = "${var.env}"
-    hostname = "${var.hostname}"
     logserver_endpoint = "${var.logserver_endpoint}"
     dbserver_endpoint = "${var.dbserver_endpoint}"
     cacheserver_endpoint = "${var.cacheserver_endpoint}"
