@@ -14,7 +14,6 @@ module "webservers" {
   env = "${var.env}"
   logserver_endpoint = "${module.logservers.endpoint}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
-  cacheserver_endpoint = "${module.cacheservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   key_name = "${aws_key_pair.micropost.key_name}"
   web_ami_tag = "micropost-web"
@@ -54,16 +53,6 @@ module "cdn" {
 //  ]
 //  key_name = "${aws_key_pair.micropost.key_name}"
 //}
-
-module "cacheservers" {
-  source = "./cacheservers"
-  security_groups = [
-    "${module.security_groups.internal}",
-  ]
-  subnets = [
-    "${module.vpc.private_subnets}",
-  ]
-}
 
 module "dbservers" {
   source = "./dbservers"

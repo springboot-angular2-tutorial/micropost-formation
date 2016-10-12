@@ -17,7 +17,6 @@ data "template_file" "web_init" {
     env = "${var.env}"
     logserver_endpoint = "${var.logserver_endpoint}"
     dbserver_endpoint = "${var.dbserver_endpoint}"
-    cacheserver_endpoint = "${var.cacheserver_endpoint}"
     deploy_bucket = "${var.deploy_bucket}"
   }
 }

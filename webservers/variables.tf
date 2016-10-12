@@ -18,10 +18,6 @@ variable "dbserver_endpoint" {
   description = "MySQL endpoint"
 }
 
-variable "cacheserver_endpoint" {
-  description = "Redis endpoint"
-}
-
 variable "deploy_bucket" {
   description = "Bucket to be used for deployment"
 }

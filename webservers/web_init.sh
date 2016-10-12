@@ -6,7 +6,6 @@ mkdir -p $(dirname $${ENV_FILE})
 cat << EOF > $${ENV_FILE}
 export SPRING_PROFILES_ACTIVE=${env}
 export RDS_ENDPOINT=${dbserver_endpoint}
-export REDIS_ENDPOINT=${cacheserver_endpoint}
 export S3_DEPLOY_BUCKET=${deploy_bucket}
 EOF
 
