@@ -29,6 +29,9 @@ after_success:
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
   - test -z "${ENV}" && (echo "${TRAVIS_BRANCH} is not a branch to deploy." && exit 0)
 
+  # exit unless ENV
+  - test "${ENV}" = "" && exit
+
   # Switch AWS Role when ENV is prod
   - test "${ENV}" = "prod" && source scripts/switch-production-role.sh
 
