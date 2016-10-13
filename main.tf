@@ -39,12 +39,6 @@ module "webservers" {
   log_bucket = "${aws_s3_bucket.log.bucket}"
 }
 
-module "cdn" {
-  source = "./cdn"
-  domain = "${var.web_host_name}.${var.domain}"
-  certificate_arn = "${var.cf_certificate_arn}"
-}
-
 //module "bastion" {
 //  source = "./bastion"
 //  subnet_id = "${module.vpc.public_subnets[0]}"
