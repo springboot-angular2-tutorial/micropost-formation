@@ -22,6 +22,10 @@ variable "deploy_bucket" {
   description = "Bucket to be used for deployment"
 }
 
+variable "nginx_cdn_bucket" {
+  description = "Nginx will serve the contents in this bucket"
+}
+
 variable "key_name" {
   description = "SSH key name for web servers"
 }

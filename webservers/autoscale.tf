@@ -18,6 +18,7 @@ data "template_file" "web_init" {
     logserver_endpoint = "${var.logserver_endpoint}"
     dbserver_endpoint = "${var.dbserver_endpoint}"
     deploy_bucket = "${var.deploy_bucket}"
+    nginx_cdn_bucket = "${var.nginx_cdn_bucket}"
   }
 }
 
@@ -50,7 +51,8 @@ resource "aws_autoscaling_group" "web" {
     "${var.web_subnets}"
   ]
   target_group_arns = [
-    "${aws_alb_target_group.web.arn}"
+    "${aws_alb_target_group.api.arn}",
+    "${aws_alb_target_group.index.arn}"
   ]
   tag {
     key = "Name"

@@ -18,5 +18,5 @@ cat << EOF > inventory
 localhost
 EOF
 
-ansible-playbook -i inventory -c local --tags configuration,deploy --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "deploy_bucket=${deploy_bucket}" site.yml
+ansible-playbook -i inventory -c local --tags configuration,deploy --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "deploy_bucket=${deploy_bucket}" -e "nginx_cdn_bucket=${nginx_cdn_bucket}" site.yml
 )
