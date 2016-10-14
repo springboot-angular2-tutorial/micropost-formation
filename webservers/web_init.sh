@@ -18,5 +18,6 @@ cat << EOF > inventory
 localhost
 EOF
 
-ansible-playbook -i inventory -c local --tags configuration,deploy --diff -e "logstash_elasticsearch_host=${logserver_endpoint}" -e "deploy_bucket=${deploy_bucket}" -e "nginx_cdn_bucket=${nginx_cdn_bucket}" site.yml
+le_key=$(cat /etc/le/config | grep user-key | cut -d" " -f3)
+ansible-playbook -i inventory -c local --diff -e "deploy_bucket=${deploy_bucket}" -e "nginx_cdn_bucket=${nginx_cdn_bucket}" -e "logentries_account_key=$${le_key}" site.yml
 )
