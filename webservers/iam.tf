@@ -24,25 +24,6 @@ resource "aws_iam_role" "web" {
 EOF
 }
 
-resource "aws_iam_role_policy" "es" {
-  name = "web-es"
-  role = "${aws_iam_role.web.id}"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "es:*"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy" "codedeploy_client" {
   name = "web-codedeploy-client"
   role = "${aws_iam_role.web.id}"

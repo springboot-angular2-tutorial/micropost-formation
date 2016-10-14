@@ -12,7 +12,6 @@ module "vpc" {
 module "webservers" {
   source = "./webservers"
   env = "${var.env}"
-  logserver_endpoint = "${module.logservers.endpoint}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   nginx_cdn_bucket = "${aws_s3_bucket.cdn.bucket}"
@@ -58,15 +57,6 @@ module "dbservers" {
     "${module.vpc.private_subnets}",
   ]
   snapshot_identifier = "micropost-init"
-}
-
-module "logservers" {
-  source = "./logservers"
-  aws_region = "${var.aws_region}"
-  allowed_segments = "${var.allowed_segments}"
-  backup_repository = "micropost-log-backups"
-  backup_backet = "${aws_s3_bucket.backup.bucket}"
-  backup_backet_arn = "${aws_s3_bucket.backup.arn}"
 }
 
 module "web_codedeploy" {

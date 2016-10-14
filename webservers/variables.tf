@@ -10,10 +10,6 @@ variable "env" {
   description = "Application environment like stg, prod eg..."
 }
 
-variable "logserver_endpoint" {
-  description = "Elastcsearch endpoint"
-}
-
 variable "dbserver_endpoint" {
   description = "MySQL endpoint"
 }
