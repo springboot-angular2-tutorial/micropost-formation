@@ -20,6 +20,7 @@ install:
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 before_script:
+  - export AWS_REGION=${AWS_DEFAULT_REGION}
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
 script:
   - |
