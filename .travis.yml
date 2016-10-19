@@ -20,11 +20,8 @@ install:
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 before_script:
-  - export AWS_REGION=${AWS_DEFAULT_REGION}
-  - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
-script:
-  # If branch name matched with deploy/xxx, then continue.
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
+script:
   - |
     if [ -z "${ENV}" ]; then
       echo "${TRAVIS_BRANCH} is not a branch to deploy."
@@ -36,7 +33,6 @@ script:
 # TODO I want to make it deploy. But my ruby and travis's ruby make conflicts...
 after_success:
   # If branch name matched with deploy/xxx, then continue.
-  - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
   - if [ -z "${ENV}" ]; then echo "${TRAVIS_BRANCH} is not a branch to deploy."; exit 0; fi
   # Save current output to use it later
   - ./terraform-env.sh ${ENV} output | tee out_before

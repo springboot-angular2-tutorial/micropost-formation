@@ -7,6 +7,7 @@ if [ "${ENVIRONMENT}" = "prod" ]; then
   source scripts/switch-production-role.sh
 fi
 
+export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb --domain "*.hana053.com" --region ${AWS_DEFAULT_REGION})
 
 asg_name=$(terraform output web_asg_name)
