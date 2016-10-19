@@ -23,34 +23,31 @@ before_script:
   - export AWS_REGION=${AWS_DEFAULT_REGION}
   - export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
 script:
-  - echo
+  # If branch name matched with deploy/xxx, then continue.
+  - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
+  - |
+    if [ -z "${ENV}" ]; then
+      echo "${TRAVIS_BRANCH} is not a branch to deploy."
+    else
+      ./terraform-env.sh ${ENV} get
+      ./terraform-env.sh ${ENV} plan
+    fi
+
+# TODO I want to make it deploy. But my ruby and travis's ruby make conflicts...
 after_success:
   # If branch name matched with deploy/xxx, then continue.
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
-  - test -z "${ENV}" && (echo "${TRAVIS_BRANCH} is not a branch to deploy." && exit 0)
-
-  # exit unless ENV
-  - test "${ENV}" = "" && exit
-
-  # Switch AWS Role when ENV is prod
-  - test "${ENV}" = "prod" && source scripts/switch-production-role.sh
-
-  # Enable terraform remote
-  - scripts/terraform-enable-remote.sh
-
+  - if [ -z "${ENV}" ]; then echo "${TRAVIS_BRANCH} is not a branch to deploy."; exit 0; fi
   # Save current output to use it later
-  - terraform output | tee out_before
-
-  # Plan and apply
-  - scripts/terraform-wrapper.sh plan || exit 1
-  - scripts/terraform-wrapper.sh apply || exit 1
-
+  - ./terraform-env.sh ${ENV} output | tee out_before
+  # Apply
+  - ./terraform-env.sh ${ENV} get
+  - ./terraform-env.sh ${ENV} apply
   # Remove unused amis
-  - bundle exec ruby scripts/remove_unused_and_rotated_amis.rb
-
+  - ruby scripts/remove_unused_and_rotated_amis.rb
   # Replace instances if web_ami was updated.
-  - terraform output | tee out_after
+  - ./terraform-env.sh ${ENV} output | tee out_after
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
-  - asg_name=$(terraform output web_asg_name)
-  - test ${lines} -eq 2 && bundle exec ruby scripts/replace_old_instances.rb ${asg_name}
+  - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
+  - test ${lines} -eq 2 && ruby scripts/replace_old_instances.rb ${asg_name}
 

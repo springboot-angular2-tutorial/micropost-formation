@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+if [ "${ENVIRONMENT}" = "prod" ]; then
+  # reset current role if exists
+  test ! -v AWS_SESSION_TOKEN && direnv reload > /dev/null 2>&1
+  # switch to production role
+  source scripts/switch-production-role.sh
+fi
 
 export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb --domain "*.hana053.com" --region ${AWS_DEFAULT_REGION})
 
@@ -10,9 +17,3 @@ if [ -n "${asg_name}" ]; then
   export TF_VAR_web_desired_capacity="${desired_capacity}"
 fi
 
-if [ "${ENV}" = "prod" ]; then
-  # prod is special
-  export TF_VAR_web_host_name="micropost"
-else
-  export TF_VAR_web_host_name="micropost-${ENV}"
-fi

@@ -7,3 +7,5 @@ export AWS_SECRET_ACCESS_KEY=$(echo ${credentials} | jq --raw-output .Credential
 export AWS_SESSION_TOKEN=$(echo ${credentials} | jq --raw-output .Credentials.SessionToken)
 
 unset credentials
+
+echo "Switched to production role."

@@ -1,6 +1,5 @@
 variable "env" {
   description = "dev, stg, prod and etc."
-  default = "dev"
 }
 
 variable "aws_region" {
