@@ -11,6 +11,7 @@ node_js:
 - '6.9.1'
 
 install:
+  # install npm packages
   - npm install -g yarn@">=0.16.0" --cache-min 999999999
   - yarn install
   # install aws cli
@@ -33,14 +34,18 @@ script:
       ./terraform-env.sh ${ENV} plan
     fi
 
-after_success:
-  # If branch name matched with deploy/xxx, then continue.
-  - if [ -z "${ENV}" ]; then echo "${TRAVIS_BRANCH} is not a branch to deploy."; exit 0; fi
+before_deploy:
   # Save current output to use it later
   - ./terraform-env.sh ${ENV} output | tee out_before
-  # Apply
-  - ./terraform-env.sh ${ENV} get
-  - ./terraform-env.sh ${ENV} apply
+
+deploy:
+  - provider: script
+    script: ./terraform-env.sh ${ENV} apply
+    skip_cleanup: true
+    on:
+      branch: deploy/*
+
+after_deploy:
   # Remove unused amis
   - node scripts/remove_unused_and_rotated_amis.js
   # Replace instances if web_ami was updated.
@@ -48,4 +53,3 @@ after_success:
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
   - test ${lines} -eq 2 && node scripts/replace_old_instances.js -n ${asg_name}
-

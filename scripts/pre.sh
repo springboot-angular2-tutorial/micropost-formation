@@ -13,7 +13,6 @@ export TF_VAR_alb_certificate_arn=$(node scripts/get_certificate_arn.js -d "*.ha
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then
   desired_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${asg_name} | jq '.AutoScalingGroups[0].DesiredCapacity')
-  echo "Current desired capacity is ${desired_capacity}."
   # respect current desired capacity
   export TF_VAR_web_desired_capacity="${desired_capacity}"
 fi
