@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 const ArgumentParser = require('argparse').ArgumentParser;
 
-AWS.config.setPromisesDependency(require('bluebird'));
 AWS.config.region = process.env.AWS_DEFAULT_REGION;
 
 const AutoScaling = new AWS.AutoScaling();

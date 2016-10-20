@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 const _ = require('lodash');
 
-AWS.config.setPromisesDependency(require('bluebird'));
 AWS.config.region = process.env.AWS_DEFAULT_REGION;
 
 const EC2 = new AWS.EC2();
