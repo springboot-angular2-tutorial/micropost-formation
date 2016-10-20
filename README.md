@@ -17,7 +17,7 @@ $ vi .envrc
 $ direnv allow
 ```
 
-Install gems.
+Install npm packages.
 
 ```
 $ npm install -g yarn@">=0.16.0"
