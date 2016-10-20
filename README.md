@@ -20,7 +20,8 @@ $ direnv allow
 Install gems.
 
 ```
-$ bundle install
+$ npm install -g yarn@">=0.16.0"
+$ yarn install
 ```
 
 Plan and Apply
