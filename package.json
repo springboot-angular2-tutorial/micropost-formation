@@ -1,0 +1,19 @@
+{
+  "name": "micropost-formation",
+  "version": "1.0.0",
+  "engines": {
+    "npm": "~6.7.0"
+  },
+  "repository": {
+    "url": "ssh://git@github.com/springboot-angular2-tutorial/micropost-formation.git",
+    "type": "git"
+  },
+  "author": "Akira Sosa <akirasosa@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "argparse": "^1.0.9",
+    "aws-sdk": "^2.6.10",
+    "bluebird": "^3.4.6",
+    "lodash": "^4.16.4"
+  }
+}

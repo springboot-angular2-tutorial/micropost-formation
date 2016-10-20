@@ -8,7 +8,7 @@ if [ "${ENVIRONMENT}" = "prod" ]; then
 fi
 
 export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
-export TF_VAR_alb_certificate_arn=$(bundle exec ruby scripts/get_certificate_arn.rb --domain "*.hana053.com" --region ${AWS_DEFAULT_REGION})
+export TF_VAR_alb_certificate_arn=$(node scripts/get_certificate_arn.js -d "*.hana053.com")
 
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then

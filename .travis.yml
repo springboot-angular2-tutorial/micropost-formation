@@ -1,16 +1,18 @@
 ---
 sudo: required
 dist: trusty
-language: ruby
-rvm:
-  - 2.3.0
+language: node_js
 cache:
   directories:
-  - vendor/bundle
+    - $HOME/.npm
+    - $HOME/.yarn-cache
+    - node_modules
+node_js:
+- '6.9.1'
 
 install:
-  - gem install travis -v 1.8.2 --no-rdoc --no-ri
-  - bundle install
+  - npm install -g yarn@">=0.16.0" --cache-min 999999999
+  - yarn install
   # install aws cli
   - sudo apt-get -y install python-pip
   - sudo pip install awscli
@@ -31,7 +33,6 @@ script:
       ./terraform-env.sh ${ENV} plan
     fi
 
-# TODO I want to make it deploy. But my ruby and travis's ruby make conflicts...
 after_success:
   # If branch name matched with deploy/xxx, then continue.
   - if [ -z "${ENV}" ]; then echo "${TRAVIS_BRANCH} is not a branch to deploy."; exit 0; fi
@@ -41,10 +42,10 @@ after_success:
   - ./terraform-env.sh ${ENV} get
   - ./terraform-env.sh ${ENV} apply
   # Remove unused amis
-  - ruby scripts/remove_unused_and_rotated_amis.rb
+  - node scripts/remove_unused_and_rotated_amis.js
   # Replace instances if web_ami was updated.
   - ./terraform-env.sh ${ENV} output | tee out_after
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
-  - test ${lines} -eq 2 && ruby scripts/replace_old_instances.rb ${asg_name}
+  - test ${lines} -eq 2 && node scripts/replace_old_instances.js -n ${asg_name}
 

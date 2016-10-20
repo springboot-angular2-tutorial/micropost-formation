@@ -3,9 +3,9 @@
 ## Dependencies
 
 * Terraform
-* direnv
-* Ruby
+* Node.js
 * AWS CLI
+* direnv
 
 ## Getting started
 
@@ -26,6 +26,7 @@ $ bundle install
 Plan and Apply
 
 ```
+$ ./terraform-env.sh stg get
 $ ./terraform-env.sh stg plan
 $ ./terraform-env.sh stg apply
 ```
