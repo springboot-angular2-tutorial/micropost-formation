@@ -8,12 +8,11 @@ cache:
     - $HOME/.yarn-cache
     - node_modules
 node_js:
-- '6.9.1'
+- '4.3.2'
 
 install:
-  # install npm packages
+  # install yarn to create archives for lambda functions
   - npm install -g yarn@">=0.16.0" --cache-min 999999999
-  - yarn install
   # install aws cli
   - sudo apt-get -y install python-pip
   - sudo pip install awscli
@@ -46,10 +45,13 @@ deploy:
       branch: deploy/*
 
 after_deploy:
-  # Remove unused amis
-  - node scripts/remove_unused_and_rotated_amis.js
-  # Replace instances if web_ami was updated.
+  # Publish to SNS Topic if web_ami was updated.
   - ./terraform-env.sh ${ENV} output | tee out_after
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
-  - test ${lines} -eq 2 && node scripts/replace_old_instances.js -n ${asg_name}
+  - account_number=$(aws sts get-caller-identity --output text --query 'Account')
+  - |
+    if [ ${lines} -eq 2 ]; then
+      aws sns publish --topic-arn "arn:aws:sns:${AWS_REGION}:${account_number}:asg_image_updated" \
+         --message "{\"asgName\": \"${asg_name}\"}"
+    fi

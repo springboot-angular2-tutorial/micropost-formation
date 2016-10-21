@@ -7,8 +7,10 @@ if [ "${ENVIRONMENT}" = "prod" ]; then
   source scripts/switch-production-role.sh
 fi
 
+certificate_arn=$(aws acm list-certificates | jq --raw-output '.CertificateSummaryList[] | select(.DomainName == "*.hana053.com") | .CertificateArn')
+
 export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
-export TF_VAR_alb_certificate_arn=$(node scripts/get_certificate_arn.js -d "*.hana053.com")
+export TF_VAR_alb_certificate_arn=${certificate_arn}
 
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then
