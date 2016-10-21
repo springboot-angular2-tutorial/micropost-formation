@@ -21,7 +21,7 @@ fi
 
 # zip lambda functions
 
-dirs=$(find functions -depth 1 -type d )
+dirs=$(find functions -mindepth 1 -maxdepth 1 -type d)
 for dir in ${dirs}
 do
   (

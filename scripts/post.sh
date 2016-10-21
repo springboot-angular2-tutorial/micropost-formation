@@ -6,6 +6,6 @@ if [ "${ENVIRONMENT}" = "prod" ]; then
 fi
 
 # remove archived lambda functions
-find  functions -depth 1 -name "*.zip" | xargs rm -rf
+find  functions -mindepth 1 -maxdepth 1 -name "*.zip" | xargs rm -rf
 
 exit 0
