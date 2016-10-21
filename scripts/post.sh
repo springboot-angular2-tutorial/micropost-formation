@@ -5,4 +5,7 @@ if [ "${ENVIRONMENT}" = "prod" ]; then
   test ! -v AWS_SESSION_TOKEN && direnv reload > /dev/null 2>&1
 fi
 
+# remove archived lambda functions
+find  functions -depth 1 -name "*.zip" | xargs rm -rf
+
 exit 0

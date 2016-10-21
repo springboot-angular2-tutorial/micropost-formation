@@ -17,3 +17,13 @@ if [ -n "${asg_name}" ]; then
   export TF_VAR_web_desired_capacity="${desired_capacity}"
 fi
 
+# zip lambda functions
+
+dirs=$(find functions -depth 1 -type d )
+for dir in ${dirs}
+do
+  (
+    cd ${dir}
+    zip -X -r ../$(echo ${dir} | cut -d"/" -f2).zip *
+  )
+done

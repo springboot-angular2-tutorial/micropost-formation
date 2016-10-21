@@ -71,3 +71,9 @@ module "security_groups" {
   vpc_id = "${module.vpc.vpc_id}"
   ssh_allowed_segments = ["${var.allowed_segments}"]
 }
+
+module "functions" {
+  source = "./functions"
+  sns_topic_arn_backend_app_updated = "${aws_sns_topic.backend_app_updated.arn}"
+  sns_topic_arn_asg_image_updated = "${aws_sns_topic.asg_image_updated.arn}"
+}
