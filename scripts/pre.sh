@@ -2,7 +2,7 @@
 
 if [ "${ENVIRONMENT}" = "prod" ]; then
   # reset current role if exists
-  test ! -v AWS_SESSION_TOKEN && direnv reload > /dev/null 2>&1
+  test ! -v AWS_SESSION_TOKEN && direnv reload
   # switch to production role
   source scripts/switch-production-role.sh
 fi

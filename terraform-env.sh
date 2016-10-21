@@ -82,7 +82,7 @@ then
 fi
 
 # Let's run the PRE_CMD hook if it's defined
-. ${PRE_CMD}
+. ${PRE_CMD} > /dev/null 2>&1
 
 # let's copy environment specific configuration to the root of the directory
 if files_exist ${ENV_DIR}/*.tf; then
@@ -100,4 +100,4 @@ if files_exist *.env.tf; then
 fi
 
 # Let's run the POST_CMD hook if it's defined
-eval ${POST_CMD}
+. ${POST_CMD} > /dev/null 2>&1
