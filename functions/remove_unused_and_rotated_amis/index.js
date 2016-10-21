@@ -1,10 +1,27 @@
 const AWS = require('aws-sdk');
 const _ = require('lodash');
 
-AWS.config.region = process.env.AWS_DEFAULT_REGION;
-
 const EC2 = new AWS.EC2();
 const AutoScaling = new AWS.AutoScaling();
+
+exports.handle = (event, ctx, cb) => {
+  console.log('processing event: %j', event);
+
+  Promise.all([rotatedImages(), unusedImageIds()])
+    .then(_.spread((rotatedImages, unusedImageIds) => {
+      return rotatedImages.filter(image => {
+        return !unusedImageIds.includes(image.ImageId)
+      })
+    }))
+    .then(images => {
+      const promises = images.map(image => {
+        return deregisterImage(image)
+          .then(deleteSnapShot)
+      });
+      return Promise.all(promises);
+    })
+    .then(() => cb(null, {message: 'success'}));
+};
 
 function rotatedImages() {
   return EC2.describeImages({
@@ -54,18 +71,3 @@ function deleteSnapShot(image) {
     })
     .catch(() => image)
 }
-
-Promise.all([rotatedImages(), unusedImageIds()])
-  .then(results => {
-    const [rotatedImages, unusedImageIds] = results;
-    return rotatedImages.filter(image => {
-      return !unusedImageIds.includes(image.ImageId)
-    })
-  })
-  .then(images => {
-    const promises = images.map(image => {
-      return deregisterImage(image).then(deleteSnapShot)
-    });
-    return Promise.all(promises);
-  })
-;

@@ -24,6 +24,7 @@ for dir in ${dirs}
 do
   (
     cd ${dir}
-    zip -X -r ../$(echo ${dir} | cut -d"/" -f2).zip *
+    yarn install
+    zip -X -r -q ../$(echo ${dir} | cut -d"/" -f2).zip *
   )
 done
