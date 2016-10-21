@@ -21,7 +21,6 @@ Install npm packages.
 
 ```
 $ npm install -g yarn@">=0.16.0"
-$ yarn install
 ```
 
 Plan and Apply
