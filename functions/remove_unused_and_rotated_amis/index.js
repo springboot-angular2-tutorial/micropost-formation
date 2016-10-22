@@ -7,11 +7,11 @@ const AutoScaling = new AWS.AutoScaling();
 exports.handle = (event, ctx, cb) => {
   console.log('processing event: %j', event);
 
-  Promise.all([rotatedImages(), unusedImageIds()])
-    .then(_.spread((rotatedImages, unusedImageIds) => {
-      return rotatedImages.filter(image => {
-        return !unusedImageIds.includes(image.ImageId)
-      })
+  Promise.all([rotatedImages(), usedImageIds()])
+    .then(_.spread((rotatedImages, usedImageIds) => {
+      return _.reject(rotatedImages, image => {
+        return _.includes(usedImageIds, image.ImageId);
+      });
     }))
     .then(images => {
       const promises = images.map(image => {
@@ -35,7 +35,7 @@ function rotatedImages() {
     .then(data => data.Images);
 }
 
-function unusedImageIds() {
+function usedImageIds() {
   return AutoScaling.describeLaunchConfigurations({}).promise()
     .then(data => {
       return data.LaunchConfigurations.map(lc => lc.ImageId);
@@ -62,6 +62,7 @@ function deleteSnapShot(image) {
     .map(m => m.SnapshotId)
     .first()
     .value();
+
   return EC2.deleteSnapshot({
     SnapshotId: snapShotId,
   }).promise()
@@ -71,3 +72,4 @@ function deleteSnapShot(image) {
     })
     .catch(() => image)
 }
+
