@@ -7,5 +7,3 @@ fi
 
 # remove archived lambda functions
 find  functions -mindepth 1 -maxdepth 1 -name "*.zip" | xargs rm -rf
-
-exit 0
