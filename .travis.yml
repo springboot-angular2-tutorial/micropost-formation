@@ -7,6 +7,7 @@ cache:
     - $HOME/.npm
     - $HOME/.yarn-cache
     - node_modules
+    - $HOME/.cache/pip
 node_js:
 - '4.3.2'
 
