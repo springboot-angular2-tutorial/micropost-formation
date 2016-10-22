@@ -24,8 +24,8 @@ resource "aws_iam_role" "web" {
 EOF
 }
 
-resource "aws_iam_role_policy" "codedeploy_client" {
-  name = "web-codedeploy-client"
+resource "aws_iam_role_policy" "read_s3_to_deploy" {
+  name = "read-s3-to-deploy"
   role = "${aws_iam_role.web.id}"
   policy = <<EOF
 {

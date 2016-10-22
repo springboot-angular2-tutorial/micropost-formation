@@ -59,13 +59,6 @@ module "dbservers" {
   snapshot_identifier = "micropost-init"
 }
 
-module "web_codedeploy" {
-  source = "./codedeploy"
-  name = "micropost"
-  group_name = "web"
-  autoscaling_groups = ["${module.webservers.asg_id}"]
-}
-
 module "security_groups" {
   source = "./security_groups"
   vpc_id = "${module.vpc.vpc_id}"
