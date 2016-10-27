@@ -109,7 +109,7 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   evaluation_periods = "1"
   metric_name = "CPUUtilization"
   namespace = "AWS/EC2"
-  period = "120"
+  period = "60"
   statistic = "Average"
   threshold = "5"
   dimensions {
