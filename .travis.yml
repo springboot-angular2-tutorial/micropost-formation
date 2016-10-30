@@ -1,22 +1,13 @@
 ---
 sudo: required
 dist: trusty
-language: node_js
-cache:
-  directories:
-    - $HOME/.npm
-    - $HOME/.yarn-cache
-    - node_modules
-    - $HOME/.cache/pip
-node_js:
-- '4.3.2'
+language: python
+cache: pip
+python:
+- '2.7'
 
 install:
-  # install yarn to create archives for lambda functions
-  - npm install -g yarn@">=0.16.0" --cache-min 999999999
-  # install aws cli
-  - sudo apt-get -y install python-pip
-  - sudo pip install awscli
+  - pip install awscli
   - aws --version
   # install terraform
   - wget https://releases.hashicorp.com/terraform/0.7.6/terraform_0.7.6_linux_amd64.zip -O /tmp/terraform.zip

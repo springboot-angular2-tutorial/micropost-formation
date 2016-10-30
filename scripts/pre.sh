@@ -18,15 +18,3 @@ if [ -n "${asg_name}" ]; then
   # respect current desired capacity
   export TF_VAR_web_desired_capacity="${desired_capacity}"
 fi
-
-# zip lambda functions
-
-dirs=$(find functions -mindepth 1 -maxdepth 1 -type d)
-for dir in ${dirs}
-do
-  (
-    cd ${dir}
-    yarn install
-    zip -X -r -q ../$(echo ${dir} | cut -d"/" -f2).zip *
-  )
-done
