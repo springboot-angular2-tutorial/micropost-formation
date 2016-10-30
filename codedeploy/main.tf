@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {
+  current = true
+}
+
 resource "aws_codedeploy_app" "main" {
   name = "${var.name}"
 }
@@ -8,6 +14,14 @@ resource "aws_codedeploy_deployment_group" "main" {
   service_role_arn = "${aws_iam_role.codedeploy_service.arn}"
   autoscaling_groups = ["${var.autoscaling_groups}"]
   deployment_config_name = "CodeDeployDefault.OneAtATime"
+  trigger_configuration {
+    trigger_events = [
+      "DeploymentSuccess",
+      "DeploymentFailure",
+    ]
+    trigger_name = "frontend_deployed"
+    trigger_target_arn = "arn:aws:sns:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:frontend_deployed"
+  }
 }
 
 resource "aws_iam_role" "codedeploy_service" {

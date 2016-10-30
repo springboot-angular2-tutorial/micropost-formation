@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {
+  current = true
+}
+
 data "aws_ami" "web" {
   most_recent = true
   owners = [
@@ -120,3 +126,14 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   ]
 }
 
+resource "aws_autoscaling_notification" "web" {
+  group_names = [
+    "${aws_autoscaling_group.web.name}",
+  ]
+  notifications  = [
+    "autoscaling:EC2_INSTANCE_LAUNCH",
+    "autoscaling:EC2_INSTANCE_TERMINATE",
+    "autoscaling:EC2_INSTANCE_LAUNCH_ERROR"
+  ]
+  topic_arn = "arn:aws:sns:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:web_autoscaled"
+}
