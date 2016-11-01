@@ -19,8 +19,6 @@ before_script:
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
   # Create AWS profile
   - ./scripts/prepare-aws-profile.sh
-  # Set current profile
-  - export AWS_PROFILE="micropost-${ENV}"
 script:
   - |
     if [ -z "${ENV}" ]; then
@@ -44,6 +42,7 @@ deploy:
 after_deploy:
   # Publish to SNS Topic if web_ami was updated.
   - ./terraform-env.sh ${ENV} output | tee out_after
+  - export AWS_PROFILE="micropost-${ENV}"
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
   - region=$(aws configure get region)

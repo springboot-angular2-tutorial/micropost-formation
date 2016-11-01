@@ -6,6 +6,10 @@ variable "aws_region" {
   default = "ap-northeast-1"
 }
 
+variable "aws_role_arn" {
+  default = ""
+}
+
 variable "allowed_segments" {
   type = "list"
   default = [

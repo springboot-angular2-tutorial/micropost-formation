@@ -77,8 +77,10 @@ then
     echo $ENVIRONMENT > $ENV_FILE
 
     # Set up remote configuration and pull latest version
-    terraform remote config -backend S3 -backend-config="bucket=$bucket" -backend-config="key=$BUCKET_KEY" -backend-config="region=$region"
-
+    terraform remote config -backend S3 \
+      -backend-config="bucket=$bucket" \
+      -backend-config="key=$BUCKET_KEY" \
+      -backend-config="region=$region"
 fi
 
 # Let's run the PRE_CMD hook if it's defined
