@@ -60,10 +60,10 @@ resource "aws_autoscaling_group" "web" {
     "${aws_alb_target_group.index.arn}"
   ]
   termination_policies = [
-    'OldestLaunchConfiguration',
-    'OldestInstance',
-    'ClosestToNextInstanceHour',
-    'Default',
+    "OldestLaunchConfiguration",
+    "OldestInstance",
+    "ClosestToNextInstanceHour",
+    "Default",
   ]
   tag {
     key = "Name"
