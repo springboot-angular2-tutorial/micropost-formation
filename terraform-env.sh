@@ -93,6 +93,7 @@ fi
 
 # Let's do work!
 terraform $ACTION $VARS_FILE_FLAG $ADDTL_PARAMS ${EXTRA_ARGS}
+terraform_status=$?
 
 # Let's remove those environment-specific configuration files we copied earlier
 if files_exist *.env.tf; then
@@ -101,3 +102,5 @@ fi
 
 # Let's run the POST_CMD hook if it's defined
 . ${POST_CMD} > /dev/null 2>&1
+
+exit ${terraform_status}
