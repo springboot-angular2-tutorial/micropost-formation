@@ -7,15 +7,20 @@ python:
 - '2.7'
 
 install:
+  # Install AWS CLI
   - pip install awscli
   - aws --version
-  # install terraform
+  # Install Terraform
   - wget https://releases.hashicorp.com/terraform/0.7.7/terraform_0.7.7_linux_amd64.zip -O /tmp/terraform.zip
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 before_script:
-  - export AWS_REGION=${AWS_DEFAULT_REGION}
+  # Determine environment
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
+  # Create AWS profile
+  - ./scripts/prepare-aws-profile.sh
+  # Set current profile
+  - export AWS_PROFILE="micropost-${ENV}"
 script:
   - |
     if [ -z "${ENV}" ]; then
@@ -47,3 +52,6 @@ after_deploy:
       aws sns publish --topic-arn "arn:aws:sns:${AWS_REGION}:${account_number}:web_image_updated" \
          --message "{\"asgName\": \"${asg_name}\"}"
     fi
+
+after_script:
+  - rm -rf ${HOME}/.aws

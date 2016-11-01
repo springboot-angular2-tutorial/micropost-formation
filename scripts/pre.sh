@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
-if [ "${ENVIRONMENT}" = "prod" ]; then
-  # reset current role if exists
-  test ! -v AWS_SESSION_TOKEN && direnv reload
-  # switch to production role
-  source scripts/switch-production-role.sh
-fi
+# Ensure AWS profile
+export AWS_PROFILE="micropost-${ENVIRONMENT}"
 
-certificate_arn=$(aws acm list-certificates | jq --raw-output '.CertificateSummaryList[] | select(.DomainName == "*.hana053.com") | .CertificateArn')
+# Set AWS region. It's required.
+export TF_VAR_aws_region=$(aws configure get region)
 
-export TF_VAR_aws_region=${AWS_DEFAULT_REGION}
-export TF_VAR_alb_certificate_arn=${certificate_arn}
+# Set ALB certificate ARN
+export TF_VAR_alb_certificate_arn=$(aws acm list-certificates | jq --raw-output '.CertificateSummaryList[] | select(.DomainName == "*.hana053.com") | .CertificateArn')
 
+# Set ASG desired capacity, if it exists
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then
   desired_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name ${asg_name} | jq '.AutoScalingGroups[0].DesiredCapacity')
