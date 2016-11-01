@@ -46,10 +46,11 @@ after_deploy:
   - ./terraform-env.sh ${ENV} output | tee out_after
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
+  - region=$(aws configure get region)
   - account_number=$(aws sts get-caller-identity --output text --query 'Account')
   - |
     if [ ${lines} -eq 2 ]; then
-      aws sns publish --topic-arn "arn:aws:sns:${AWS_REGION}:${account_number}:web_image_updated" \
+      aws sns publish --topic-arn "arn:aws:sns:${region}:${account_number}:web_image_updated" \
          --message "{\"asgName\": \"${asg_name}\"}"
     fi
 
