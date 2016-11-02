@@ -84,7 +84,7 @@ then
 fi
 
 # Let's run the PRE_CMD hook if it's defined
-. ${PRE_CMD} > /dev/null 2>&1
+source ${PRE_CMD} > /dev/null 2>&1
 
 # let's copy environment specific configuration to the root of the directory
 if files_exist ${ENV_DIR}/*.tf; then
@@ -103,6 +103,6 @@ if files_exist *.env.tf; then
 fi
 
 # Let's run the POST_CMD hook if it's defined
-. ${POST_CMD} > /dev/null 2>&1
+source ${POST_CMD} > /dev/null 2>&1
 
 exit ${terraform_status}

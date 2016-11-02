@@ -17,13 +17,12 @@ install:
 before_script:
   # Determine environment
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
-  # Create AWS profile
-  - ./scripts/prepare-aws-profile.sh
 script:
   - |
     if [ -z "${ENV}" ]; then
       echo "${TRAVIS_BRANCH} is not a branch to deploy."
     else
+      source ./scripts/switch-role.sh
       ./terraform-env.sh ${ENV} get
       ./terraform-env.sh ${ENV} plan
     fi
@@ -42,16 +41,13 @@ deploy:
 after_deploy:
   # Publish to SNS Topic if web_ami was updated.
   - ./terraform-env.sh ${ENV} output | tee out_after
-  - AWS_PROFILE="micropost-${ENV}"
   - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
   - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
-  - region=$(aws configure get region --profile $AWS_PROFILE)
   - account_number=$(aws sts get-caller-identity --output text --query 'Account' --profile $AWS_PROFILE)
   - |
     if [ ${lines} -eq 2 ]; then
-      aws sns publish --topic-arn "arn:aws:sns:${region}:${account_number}:web_image_updated" \
-         --message "{\"asgName\": \"${asg_name}\"}" \
-         --profile $AWS_PROFILE
+      aws sns publish --topic-arn "arn:aws:sns:${AWS_DEFAULT_REGION}:${account_number}:web_image_updated" \
+         --message "{\"asgName\": \"${asg_name}\"}"
     fi
 
 after_script:

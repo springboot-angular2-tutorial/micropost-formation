@@ -2,3 +2,6 @@
 
 export CLOUDFLARE_EMAIL=
 export CLOUDFLARE_TOKEN=
+
+export ROLE_ARN_stg=
+export ROLE_ARN_prod=

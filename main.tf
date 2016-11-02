@@ -1,8 +1,5 @@
 provider "aws" {
-  region = "${var.aws_region}"
-  assume_role {
-    role_arn = "${var.aws_role_arn}"
-  }
+  region = "ap-northeast-1"
 }
 
 data "aws_caller_identity" "current" {}
