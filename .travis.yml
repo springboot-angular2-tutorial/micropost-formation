@@ -44,5 +44,6 @@ after_deploy:
   - account_number=$(aws sts get-caller-identity --output text --query 'Account')
   - |
     if [ ${web_ami_after} != ${web_ami_before} ]; then
-      aws sns publish --topic-arn "arn:aws:sns:${AWS_DEFAULT_REGION}:${account_number}:web_image_updated"
+      aws sns publish --topic-arn "arn:aws:sns:${AWS_DEFAULT_REGION}:${account_number}:web_image_updated" \
+        --message "${ENV}: ${TRAVIS_COMMIT}"
     fi
