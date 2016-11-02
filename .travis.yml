@@ -28,8 +28,8 @@ script:
     fi
 
 before_deploy:
-  # Save current output to use it later
-  - ./terraform-env.sh ${ENV} output | tee out_before
+  # Save current web_ami to use it later
+  - web_ami_before=$(./terraform-env.sh ${ENV} output web_ami)
 
 deploy:
   - provider: script
@@ -40,15 +40,9 @@ deploy:
 
 after_deploy:
   # Publish to SNS Topic if web_ami was updated.
-  - ./terraform-env.sh ${ENV} output | tee out_after
-  - lines=$(cat out_before out_after | grep 'web_ami' | uniq | wc -l)
-  - asg_name=$(grep "web_asg_name" out_after | awk -F ' = ' '{print $2}')
+  - web_ami_after=$(./terraform-env.sh ${ENV} output web_ami)
   - account_number=$(aws sts get-caller-identity --output text --query 'Account')
   - |
-    if [ ${lines} -eq 2 ]; then
-      aws sns publish --topic-arn "arn:aws:sns:${AWS_DEFAULT_REGION}:${account_number}:web_image_updated" \
-         --message "{\"asgName\": \"${asg_name}\"}"
+    if [ ${web_ami_after} != ${web_ami_before} ]; then
+      aws sns publish --topic-arn "arn:aws:sns:${AWS_DEFAULT_REGION}:${account_number}:web_image_updated"
     fi
-
-after_script:
-  - rm -rf ${HOME}/.aws
