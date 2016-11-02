@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -u
-
 # Parse variable such as ROLE_ARN_stg, ROLE_ARN_prod and etc.
 ROLE_ARN=$(eval echo '$ROLE_ARN_'${ENV})
 

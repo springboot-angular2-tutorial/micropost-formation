@@ -17,7 +17,6 @@ install:
 before_script:
   # Determine environment
   - export ENV=$(echo "${TRAVIS_BRANCH}" | perl -ne "print $& if /(?<=deploy\/).*/")
-  - sed -n 55p /home/travis/build.sh
 script:
   - |
     if [ -z "${ENV}" ]; then
