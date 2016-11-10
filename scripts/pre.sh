@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Set ALB certificate ARN
-export TF_VAR_alb_certificate_arn=$(aws acm list-certificates | jq --raw-output '.CertificateSummaryList[] | select(.DomainName == "*.hana053.com") | .CertificateArn')
-
 # Set ASG desired capacity, if it exists
 asg_name=$(terraform output web_asg_name)
 if [ -n "${asg_name}" ]; then

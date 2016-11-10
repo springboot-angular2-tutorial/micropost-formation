@@ -14,10 +14,6 @@ variable "domain" {
   default = "hana053.com"
 }
 
-variable "alb_certificate_arn" {
-  description = "ACM certificate arn for ALB"
-}
-
 variable "web_host_name" {
 }
 

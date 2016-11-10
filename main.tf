@@ -31,7 +31,6 @@ module "webservers" {
     "${module.security_groups.internet_in_http}",
     "${module.security_groups.internet_in_https}",
   ]
-  alb_certificate_arn = "${var.alb_certificate_arn}"
   min_scale_size = "${var.web_min_size}"
   desired_capacity = "${var.web_desired_capacity}"
   vpc_id = "${module.vpc.vpc_id}"

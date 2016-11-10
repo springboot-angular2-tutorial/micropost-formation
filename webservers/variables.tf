@@ -53,10 +53,6 @@ variable "alb_security_groups" {
   default = []
 }
 
-variable "alb_certificate_arn" {
-  description = "alb certificate arn"
-}
-
 variable "vpc_id" {
   description = "vpc id for alb target group"
 }

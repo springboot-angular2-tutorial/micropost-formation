@@ -1,3 +1,8 @@
+data "aws_acm_certificate" "main" {
+  domain = "*.hana053.com"
+  statuses = ["ISSUED"]
+}
+
 resource "aws_alb" "web" {
   name = "web"
   internal = false
@@ -49,7 +54,7 @@ resource "aws_alb_listener" "https" {
   port = "443"
   protocol = "HTTPS"
   ssl_policy = "ELBSecurityPolicy-2015-05"
-  certificate_arn = "${var.alb_certificate_arn}"
+  certificate_arn = "${data.aws_acm_certificate.main.arn}"
   default_action {
     target_group_arn = "${aws_alb_target_group.index.arn}"
     type = "forward"
