@@ -23,7 +23,6 @@ data "template_file" "web_init" {
     env = "${var.env}"
     dbserver_endpoint = "${var.dbserver_endpoint}"
     deploy_bucket = "${var.deploy_bucket}"
-    nginx_cdn_bucket = "${var.nginx_cdn_bucket}"
   }
 }
 
