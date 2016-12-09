@@ -1,0 +1,15 @@
+[
+  {
+    "cpu": 10,
+    "essential": true,
+    "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/${image_id}:latest",
+    "memory": 300,
+    "name": "frontend",
+    "portMappings": [
+      {
+        "containerPort": 80,
+        "hostPort": 80
+      }
+    ]
+  }
+]

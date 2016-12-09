@@ -1,11 +1,3 @@
-variable "min_scale_size" {
-  default = 1
-}
-
-variable "desired_capacity" {
-  default = 1
-}
-
 variable "env" {
   description = "Application environment like stg, prod eg..."
 }
@@ -18,15 +10,8 @@ variable "deploy_bucket" {
   description = "Bucket to be used for deployment"
 }
 
-variable "nginx_cdn_bucket" {
-  description = "Nginx will serve the contents in this bucket"
-}
-
 variable "key_name" {
   description = "SSH key name for web servers"
-}
-
-variable "web_ami_tag" {
 }
 
 variable "web_subnets" {

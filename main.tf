@@ -15,7 +15,6 @@ module "webservers" {
   dbserver_endpoint = "${module.dbservers.endpoint}"
   deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
   key_name = "${aws_key_pair.micropost.key_name}"
-  web_ami_tag = "micropost-web"
   web_subnets = [
     "${module.vpc.public_subnets}"
   ]
@@ -30,8 +29,6 @@ module "webservers" {
     "${module.security_groups.internet_in_http}",
     "${module.security_groups.internet_in_https}",
   ]
-  min_scale_size = "${var.web_min_size}"
-  desired_capacity = "${var.web_desired_capacity}"
   vpc_id = "${module.vpc.vpc_id}"
   log_bucket = "${aws_s3_bucket.log.bucket}"
 }
@@ -55,13 +52,6 @@ module "dbservers" {
     "${module.vpc.private_subnets}",
   ]
   snapshot_identifier = "micropost-init"
-}
-
-module "web_codedeploy" {
-  source = "./codedeploy"
-  name = "micropost"
-  group_name = "web-frontend"
-  autoscaling_groups = ["${module.webservers.asg_id}"]
 }
 
 module "security_groups" {

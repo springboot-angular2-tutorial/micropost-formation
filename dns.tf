@@ -8,7 +8,7 @@ resource "cloudflare_record" "main" {
 resource "cloudflare_record" "cdn" {
   domain = "${var.domain}"
   name = "cdn-${var.env}"
-  value = "${aws_s3_bucket.cdn.bucket}.s3.amazonaws.com"
+  value = "${var.web_host_name}.hana053.com"
   proxied = true
   type = "CNAME"
 }

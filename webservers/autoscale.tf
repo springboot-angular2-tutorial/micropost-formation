@@ -1,34 +1,15 @@
-data "aws_caller_identity" "current" {}
-
-data "aws_region" "current" {
-  current = true
-}
-
-data "aws_ami" "web" {
+data "aws_ami" "ecs" {
   most_recent = true
-  owners = [
-    "self"
-  ]
+  owners = ["amazon"]
   filter {
-    name = "tag:Name"
-    values = [
-      "${var.web_ami_tag}"
-    ]
-  }
-}
-
-data "template_file" "web_init" {
-  template = "${file("./webservers/web_init.sh")}"
-  vars {
-    env = "${var.env}"
-    dbserver_endpoint = "${var.dbserver_endpoint}"
-    deploy_bucket = "${var.deploy_bucket}"
+    name = "name"
+    values = ["amzn-ami-*-amazon-ecs-optimized"]
   }
 }
 
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-"
-  image_id = "${data.aws_ami.web.id}"
+  image_id = "${data.aws_ami.ecs.id}"
   instance_type = "t2.micro"
   security_groups = [
     "${var.web_security_groups}"
@@ -36,7 +17,10 @@ resource "aws_launch_configuration" "web" {
   key_name = "${var.key_name}"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
-  user_data = "${data.template_file.web_init.rendered}"
+  user_data = <<EOF
+#!/bin/bash
+echo "ECS_CLUSTER=${aws_ecs_cluster.main.name}" >> /etc/ecs/ecs.config
+EOF
   lifecycle {
     create_before_destroy = true
   }
@@ -45,18 +29,16 @@ resource "aws_launch_configuration" "web" {
 resource "aws_autoscaling_group" "web" {
   name = "web"
   launch_configuration = "${aws_launch_configuration.web.id}"
-  max_size = 2
-  min_size = "${var.min_scale_size}"
-  desired_capacity = "${var.desired_capacity}"
-  health_check_grace_period = 300
+  max_size = 4
+  min_size = 1
   health_check_type = "ELB"
   force_delete = true
   vpc_zone_identifier = [
     "${var.web_subnets}"
   ]
   target_group_arns = [
-    "${aws_alb_target_group.api.arn}",
-    "${aws_alb_target_group.index.arn}"
+//    "${aws_alb_target_group.api.arn}",
+    "${aws_alb_target_group.frontend.arn}"
   ]
   termination_policies = [
     "OldestLaunchConfiguration",
@@ -64,22 +46,9 @@ resource "aws_autoscaling_group" "web" {
     "ClosestToNextInstanceHour",
     "Default",
   ]
-  tag {
-    key = "Name"
-    value = "${var.env}-web"
-    propagate_at_launch = true
-  }
-  tag {
-    key = "Env"
-    value = "${var.env}"
-    propagate_at_launch = true
-  }
-  tag {
-    key = "Role"
-    value = "web"
-    propagate_at_launch = true
-  }
 }
+
+// ------ scale out -------
 
 resource "aws_autoscaling_policy" "web_scale_out" {
   name = "web-Instance-ScaleOut-CPU-High"
@@ -106,6 +75,8 @@ resource "aws_cloudwatch_metric_alarm" "web_gte_threshold" {
   ]
 }
 
+// ------ scale in -------
+
 resource "aws_autoscaling_policy" "web_scale_in" {
   name = "web-Instance-ScaleIn-CPU-Low"
   scaling_adjustment = -1
@@ -131,6 +102,8 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   ]
 }
 
+// ------ notification -------
+
 resource "aws_autoscaling_notification" "web" {
   group_names = [
     "${aws_autoscaling_group.web.name}",
@@ -141,4 +114,62 @@ resource "aws_autoscaling_notification" "web" {
     "autoscaling:EC2_INSTANCE_LAUNCH_ERROR"
   ]
   topic_arn = "arn:aws:sns:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:web_autoscaled"
+}
+
+// ------ iam -------
+
+resource "aws_iam_instance_profile" "web" {
+  name = "web"
+  roles = [
+    "${aws_iam_role.web.name}"
+  ]
+}
+
+resource "aws_iam_role" "web" {
+  name = "web"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "ecs_host" {
+  name = "ecs-host"
+  role = "${aws_iam_role.web.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ecsInstanceRole",
+      "Effect": "Allow",
+      "Action": [
+        "ecs:DeregisterContainerInstance",
+        "ecs:DiscoverPollEndpoint",
+        "ecs:Poll",
+        "ecs:RegisterContainerInstance",
+        "ecs:Submit*",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+EOF
 }
