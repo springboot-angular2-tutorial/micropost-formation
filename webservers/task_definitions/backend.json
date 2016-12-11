@@ -1,0 +1,33 @@
+[
+  {
+    "cpu": 10,
+    "essential": true,
+    "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/micropost/backend:latest",
+    "memory": 400,
+    "name": "backend",
+    "environment": [
+      {
+        "name": "SPRING_PROFILES_ACTIVE",
+        "value": "${env}"
+      },
+      {
+        "name": "MYSQL_ENDPOINT",
+        "value": "${dbserver_endpoint}"
+      },
+      {
+        "name": "JASYPT_ENCRYPTOR_PASSWORD",
+        "value": "${app_encryption_password}"
+      },
+      {
+        "name": "NEW_RELIC_LICENSE_KEY",
+        "value": "${newrelic_license_key}"
+      }
+    ],
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ]
+  }
+]

@@ -5,3 +5,6 @@ export CLOUDFLARE_TOKEN=
 
 export ROLE_ARN_stg=
 export ROLE_ARN_prod=
+
+export TF_VAR_app_encryption_password=
+export TF_VAR_newrelic_license_key=

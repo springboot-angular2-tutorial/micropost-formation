@@ -13,7 +13,8 @@ module "webservers" {
   source = "./webservers"
   env = "${var.env}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
-  deploy_bucket = "${aws_s3_bucket.deploy.bucket}"
+  app_encryption_password = "${var.app_encryption_password}"
+  newrelic_license_key = "${var.newrelic_license_key}"
   key_name = "${aws_key_pair.micropost.key_name}"
   web_subnets = [
     "${module.vpc.public_subnets}"

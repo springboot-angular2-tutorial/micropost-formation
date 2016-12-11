@@ -35,6 +35,25 @@ resource "aws_alb_target_group" "frontend" {
   }
 }
 
+// --------- backend -----------
+
+resource "aws_alb_target_group" "backend" {
+  name = "backend"
+  port = 8080
+  protocol = "HTTP"
+  vpc_id = "${var.vpc_id}"
+  health_check {
+    interval = 30
+    path = "/manage/health"
+    port = 8080
+    protocol = "HTTP"
+    timeout = 5
+    unhealthy_threshold = 2
+  }
+}
+
+// --------- listeners -----------
+
 resource "aws_alb_listener" "http" {
   load_balancer_arn = "${aws_alb.web.arn}"
   port = "80"
@@ -57,36 +76,17 @@ resource "aws_alb_listener" "https" {
   }
 }
 
-// --------- backend -----------
-
-//resource "aws_alb_target_group" "api" {
-//  name = "api"
-//  port = 8080
-//  protocol = "HTTP"
-//  vpc_id = "${var.vpc_id}"
-//  health_check {
-//    interval = 30
-//    path = "/manage/health"
-//    port = 8080
-//    protocol = "HTTP"
-//    timeout = 5
-//    unhealthy_threshold = 2
-//  }
-//}
-
-
-//resource "aws_alb_listener_rule" "api" {
-//  listener_arn = "${aws_alb_listener.https.arn}"
-//  priority = 100
-//  action {
-//    type = "forward"
-//    target_group_arn = "${aws_alb_target_group.api.arn}"
-//  }
-//  condition {
-//    field = "path-pattern"
-//    values = [
-//      "/api/*"
-//    ]
-//  }
-//}
-
+resource "aws_alb_listener_rule" "backend" {
+  listener_arn = "${aws_alb_listener.https.arn}"
+  priority = 100
+  condition {
+    field = "path-pattern"
+    values = [
+      "/api/*"
+    ]
+  }
+  action {
+    type = "forward"
+    target_group_arn = "${aws_alb_target_group.backend.arn}"
+  }
+}

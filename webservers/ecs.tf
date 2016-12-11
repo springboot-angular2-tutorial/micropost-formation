@@ -4,10 +4,6 @@ resource "aws_ecs_cluster" "main" {
 
 // ------ frontend -------
 
-resource "aws_ecr_repository" "frontend" {
-  name = "micropost/frontend"
-}
-
 resource "aws_ecs_service" "frontend" {
   name = "frontend"
   cluster = "${aws_ecs_cluster.main.id}"
@@ -25,11 +21,10 @@ resource "aws_ecs_service" "frontend" {
 }
 
 data "template_file" "frontend_task_definition" {
-  template = "${file("./webservers/task-definitions/frontend.json")}"
+  template = "${file("./webservers/task_definitions/frontend.json")}"
   vars {
     account_number = "${data.aws_caller_identity.current.account_id}"
     region = "${data.aws_region.current.id}"
-    image_id = "${aws_ecr_repository.frontend.id}"
   }
 }
 
@@ -39,6 +34,39 @@ resource "aws_ecs_task_definition" "frontend" {
 }
 
 // ------ backend -------
+
+resource "aws_ecs_service" "backend" {
+  name = "backend"
+  cluster = "${aws_ecs_cluster.main.id}"
+  task_definition = "${aws_ecs_task_definition.backend.arn}"
+  desired_count = 1
+  iam_role = "${aws_iam_role.ecs_service.arn}"
+  depends_on = [
+    "aws_iam_role_policy.ecs_service_role_policy"]
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.backend.id}"
+    container_name = "backend"
+    container_port = "8080"
+  }
+}
+
+data "template_file" "backend_task_definition" {
+  template = "${file("./webservers/task_definitions/backend.json")}"
+  vars {
+    account_number = "${data.aws_caller_identity.current.account_id}"
+    region = "${data.aws_region.current.id}"
+    env = "${var.env}"
+    dbserver_endpoint = "${var.dbserver_endpoint}"
+    app_encryption_password = "${var.app_encryption_password}"
+    newrelic_license_key = "${var.newrelic_license_key}"
+  }
+}
+
+resource "aws_ecs_task_definition" "backend" {
+  family = "micropost-backend"
+  container_definitions = "${data.template_file.backend_task_definition.rendered}"
+}
 
 // ------ iam -------
 

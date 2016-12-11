@@ -2,7 +2,7 @@
   {
     "cpu": 10,
     "essential": true,
-    "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/${image_id}:latest",
+    "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/micropost/frontend:latest",
     "memory": 300,
     "name": "frontend",
     "portMappings": [

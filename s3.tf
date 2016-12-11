@@ -1,8 +1,3 @@
-resource "aws_s3_bucket" "deploy" {
-  bucket = "deploy-${var.env}.${var.domain}"
-  force_destroy = true
-}
-
 resource "aws_s3_bucket" "log" {
   bucket = "log-${var.env}.${var.domain}"
   force_destroy = true

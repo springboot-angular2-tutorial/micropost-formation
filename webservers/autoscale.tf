@@ -7,6 +7,14 @@ data "aws_ami" "ecs" {
   }
 }
 
+data "template_file" "user_data" {
+  template = "${file("./webservers/user_data.sh")}"
+  vars {
+    cluster_name = "${aws_ecs_cluster.main.name}"
+    newrelic_license_key  = "${var.newrelic_license_key}"
+  }
+}
+
 resource "aws_launch_configuration" "web" {
   name_prefix = "web-"
   image_id = "${data.aws_ami.ecs.id}"
@@ -17,10 +25,7 @@ resource "aws_launch_configuration" "web" {
   key_name = "${var.key_name}"
   associate_public_ip_address = true
   iam_instance_profile = "${aws_iam_instance_profile.web.id}"
-  user_data = <<EOF
-#!/bin/bash
-echo "ECS_CLUSTER=${aws_ecs_cluster.main.name}" >> /etc/ecs/ecs.config
-EOF
+  user_data = "${data.template_file.user_data.rendered}"
   lifecycle {
     create_before_destroy = true
   }
@@ -29,7 +34,7 @@ EOF
 resource "aws_autoscaling_group" "web" {
   name = "web"
   launch_configuration = "${aws_launch_configuration.web.id}"
-  max_size = 4
+  max_size = 2
   min_size = 1
   health_check_type = "ELB"
   force_delete = true
@@ -37,7 +42,7 @@ resource "aws_autoscaling_group" "web" {
     "${var.web_subnets}"
   ]
   target_group_arns = [
-//    "${aws_alb_target_group.api.arn}",
+    "${aws_alb_target_group.backend.arn}",
     "${aws_alb_target_group.frontend.arn}"
   ]
   termination_policies = [
