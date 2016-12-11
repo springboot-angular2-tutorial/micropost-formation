@@ -3,7 +3,6 @@
 ## Dependencies
 
 * Terraform
-* Node.js
 * AWS CLI
 * direnv
 
@@ -15,12 +14,6 @@ Configure settings.
 $ cp .envrc.example .envrc
 $ vi .envrc
 $ direnv allow
-```
-
-Install npm packages.
-
-```
-$ npm install -g yarn
 ```
 
 Plan and Apply
