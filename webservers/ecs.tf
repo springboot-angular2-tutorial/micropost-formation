@@ -25,12 +25,17 @@ data "template_file" "frontend_task_definition" {
   vars {
     account_number = "${data.aws_caller_identity.current.account_id}"
     region = "${data.aws_region.current.id}"
+    log_group_name = "${aws_cloudwatch_log_group.frontend.name}"
   }
 }
 
 resource "aws_ecs_task_definition" "frontend" {
   family = "micropost-frontend"
   container_definitions = "${data.template_file.frontend_task_definition.rendered}"
+}
+
+resource "aws_cloudwatch_log_group" "frontend" {
+  name = "frontend"
 }
 
 // ------ backend -------
@@ -60,12 +65,17 @@ data "template_file" "backend_task_definition" {
     dbserver_endpoint = "${var.dbserver_endpoint}"
     app_encryption_password = "${var.app_encryption_password}"
     newrelic_license_key = "${var.newrelic_license_key}"
+    log_group_name = "${aws_cloudwatch_log_group.backend.name}"
   }
 }
 
 resource "aws_ecs_task_definition" "backend" {
   family = "micropost-backend"
   container_definitions = "${data.template_file.backend_task_definition.rendered}"
+}
+
+resource "aws_cloudwatch_log_group" "backend" {
+  name = "backend"
 }
 
 // ------ iam -------

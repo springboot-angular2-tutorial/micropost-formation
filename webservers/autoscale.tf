@@ -160,15 +160,19 @@ resource "aws_iam_role_policy" "ecs_host" {
       "Sid": "ecsInstanceRole",
       "Effect": "Allow",
       "Action": [
+        "ecs:CreateCluster",
         "ecs:DeregisterContainerInstance",
         "ecs:DiscoverPollEndpoint",
         "ecs:Poll",
         "ecs:RegisterContainerInstance",
+        "ecs:StartTelemetrySession",
         "ecs:Submit*",
+        "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
-        "ecr:BatchGetImage",
         "ecr:GetDownloadUrlForLayer",
-        "ecr:GetAuthorizationToken"
+        "ecr:BatchGetImage",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
       ],
       "Resource": [
         "*"

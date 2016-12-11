@@ -28,6 +28,13 @@
         "containerPort": 8080,
         "hostPort": 8080
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group_name}",
+        "awslogs-region": "${region}"
+      }
+    }
   }
 ]
