@@ -3,12 +3,12 @@
     "cpu": 10,
     "essential": true,
     "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/micropost/frontend:latest",
-    "memory": 300,
+    "memory": 50,
     "name": "frontend",
     "portMappings": [
       {
         "containerPort": 80,
-        "hostPort": 80
+        "hostPort": 0
       }
     ],
     "logConfiguration": {

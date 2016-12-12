@@ -28,7 +28,6 @@ resource "aws_alb_target_group" "frontend" {
   health_check {
     interval = 30
     path = "/"
-    port = 80
     protocol = "HTTP"
     timeout = 5
     unhealthy_threshold = 2
@@ -45,7 +44,6 @@ resource "aws_alb_target_group" "backend" {
   health_check {
     interval = 30
     path = "/manage/health"
-    port = 8080
     protocol = "HTTP"
     timeout = 5
     unhealthy_threshold = 2
