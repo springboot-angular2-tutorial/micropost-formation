@@ -68,12 +68,12 @@ resource "aws_cloudwatch_metric_alarm" "web_gte_threshold" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "1"
   metric_name = "CPUUtilization"
-  namespace = "AWS/EC2"
+  namespace = "AWS/ECS"
   period = "120"
   statistic = "Average"
   threshold = "80"
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    ClusterName = "${aws_ecs_cluster.main.name}"
   }
   alarm_actions = [
     "${aws_autoscaling_policy.web_scale_out.arn}"
@@ -95,12 +95,12 @@ resource "aws_cloudwatch_metric_alarm" "web_lt_threshold" {
   comparison_operator = "LessThanThreshold"
   evaluation_periods = "1"
   metric_name = "CPUUtilization"
-  namespace = "AWS/EC2"
+  namespace = "AWS/ECS"
   period = "60"
   statistic = "Average"
   threshold = "5"
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.web.name}"
+    ClusterName = "${aws_ecs_cluster.main.name}"
   }
   alarm_actions = [
     "${aws_autoscaling_policy.web_scale_in.arn}"

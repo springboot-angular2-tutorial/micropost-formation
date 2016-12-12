@@ -1,6 +1,6 @@
 [
   {
-    "cpu": 10,
+    "cpu": 256,
     "essential": true,
     "image": "${account_number}.dkr.ecr.${region}.amazonaws.com/micropost/backend:latest",
     "memory": 400,
