@@ -63,7 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "web_gte_threshold" {
   evaluation_periods = "1"
   metric_name = "CPUUtilization"
   namespace = "AWS/ECS"
-  period = "120"
+  period = "300"
   statistic = "Average"
   threshold = "80"
   dimensions {
