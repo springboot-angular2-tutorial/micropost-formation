@@ -45,12 +45,6 @@ resource "aws_autoscaling_group" "web" {
     "${aws_alb_target_group.backend.arn}",
     "${aws_alb_target_group.frontend.arn}"
   ]
-  termination_policies = [
-    "OldestLaunchConfiguration",
-    "OldestInstance",
-    "ClosestToNextInstanceHour",
-    "Default",
-  ]
 }
 
 // ------ scale out -------
@@ -149,36 +143,9 @@ resource "aws_iam_role" "web" {
 EOF
 }
 
-resource "aws_iam_role_policy" "ecs_host" {
+resource "aws_iam_policy_attachment" "ecs_host" {
   name = "ecs-host"
-  role = "${aws_iam_role.web.id}"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "ecsInstanceRole",
-      "Effect": "Allow",
-      "Action": [
-        "ecs:CreateCluster",
-        "ecs:DeregisterContainerInstance",
-        "ecs:DiscoverPollEndpoint",
-        "ecs:Poll",
-        "ecs:RegisterContainerInstance",
-        "ecs:StartTelemetrySession",
-        "ecs:Submit*",
-        "ecr:GetAuthorizationToken",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
+  roles = ["${aws_iam_role.web.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
-EOF
-}
+

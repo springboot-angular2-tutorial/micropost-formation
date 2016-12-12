@@ -10,7 +10,7 @@ resource "aws_iam_role" "ecs_service" {
   name = "ecs-service"
   assume_role_policy = <<EOF
 {
-  "Version": "2008-10-17",
+  "Version": "2012-10-17",
   "Statement": [
     {
       "Action": "sts:AssumeRole",
@@ -26,28 +26,10 @@ resource "aws_iam_role" "ecs_service" {
 EOF
 }
 
-resource "aws_iam_role_policy" "ecs_service_role_policy" {
+resource "aws_iam_policy_attachment" "ecs_service" {
   name = "ecs-service"
-  role = "${aws_iam_role.ecs_service.id}"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:Describe*",
-        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-        "elasticloadbalancing:DeregisterTargets",
-        "elasticloadbalancing:Describe*",
-        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-        "elasticloadbalancing:RegisterTargets"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-EOF
+  roles = ["${aws_iam_role.ecs_service.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
 // ------ iam for application autoscaling -------
@@ -71,7 +53,7 @@ EOF
 }
 
 resource "aws_iam_policy_attachment" "ecs_autoscale" {
-  name = "ecs-autoscale-role-attach"
+  name = "ecs-autoscale"
   roles = ["${aws_iam_role.ecs_autoscale.name}"]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
 }
