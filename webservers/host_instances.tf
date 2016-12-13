@@ -41,10 +41,6 @@ resource "aws_autoscaling_group" "web" {
   vpc_zone_identifier = [
     "${var.web_subnets}"
   ]
-  target_group_arns = [
-    "${aws_alb_target_group.backend.arn}",
-    "${aws_alb_target_group.frontend.arn}"
-  ]
 }
 
 // ------ scale out -------
