@@ -20,7 +20,7 @@ resource "aws_ecs_service" "frontend" {
 // ------ task -------
 
 data "template_file" "frontend_task_definition" {
-  template = "${file("./webservers/task_definitions/frontend.json")}"
+  template = "${file("./webservers/frontend.json")}"
   vars {
     account_number = "${data.aws_caller_identity.current.account_id}"
     region = "${data.aws_region.current.id}"

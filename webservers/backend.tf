@@ -20,7 +20,7 @@ resource "aws_ecs_service" "backend" {
 // ------ task -------
 
 data "template_file" "backend_task_definition" {
-  template = "${file("./webservers/task_definitions/backend.json")}"
+  template = "${file("./webservers/backend.json")}"
   vars {
     account_number = "${data.aws_caller_identity.current.account_id}"
     region = "${data.aws_region.current.id}"
