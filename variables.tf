@@ -17,10 +17,6 @@ variable "domain" {
 variable "web_host_name" {
 }
 
-variable "app_encryption_password" {
-  description = "Applicatoin password to decrypt secret properties"
-}
-
 variable "newrelic_license_key" {
   description = "New Relic licence key"
 }

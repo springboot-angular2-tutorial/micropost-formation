@@ -26,7 +26,6 @@ data "template_file" "backend_task_definition" {
     region = "${data.aws_region.current.id}"
     env = "${var.env}"
     dbserver_endpoint = "${var.dbserver_endpoint}"
-    app_encryption_password = "${var.app_encryption_password}"
     newrelic_license_key = "${var.newrelic_license_key}"
     log_group_name = "${aws_cloudwatch_log_group.backend.name}"
   }

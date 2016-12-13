@@ -6,10 +6,6 @@ variable "dbserver_endpoint" {
   description = "MySQL endpoint"
 }
 
-variable "app_encryption_password" {
-  description = "Applicatoin password to decrypt secret properties"
-}
-
 variable "newrelic_license_key" {
   description = "New Relic licence key"
 }

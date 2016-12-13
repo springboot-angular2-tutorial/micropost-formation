@@ -15,10 +15,6 @@
         "value": "${dbserver_endpoint}"
       },
       {
-        "name": "JASYPT_ENCRYPTOR_PASSWORD",
-        "value": "${app_encryption_password}"
-      },
-      {
         "name": "NEW_RELIC_LICENSE_KEY",
         "value": "${newrelic_license_key}"
       }
