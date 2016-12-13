@@ -7,7 +7,8 @@ resource "aws_ecs_service" "backend" {
   desired_count = 1
   iam_role = "${aws_iam_role.ecs_service.arn}"
   depends_on = [
-    "aws_iam_role_policy.ecs_service_role_policy"]
+    "aws_iam_policy_attachment.ecs_service"
+  ]
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.backend.id}"
@@ -76,7 +77,9 @@ resource "aws_cloudwatch_metric_alarm" "backend_cpu_high" {
     ClusterName = "${aws_ecs_cluster.main.name}"
     ServiceName = "${aws_ecs_service.backend.name}"
   }
-  alarm_actions = ["${aws_appautoscaling_policy.backend_scale_out.arn}"]
+  alarm_actions = [
+    "${aws_appautoscaling_policy.backend_scale_out.arn}"
+  ]
 }
 
 resource "aws_appautoscaling_policy" "backend_scale_in" {
@@ -104,5 +107,7 @@ resource "aws_cloudwatch_metric_alarm" "backend_cpu_low" {
     ClusterName = "${aws_ecs_cluster.main.name}"
     ServiceName = "${aws_ecs_service.backend.name}"
   }
-  alarm_actions = ["${aws_appautoscaling_policy.backend_scale_in.arn}"]
+  alarm_actions = [
+    "${aws_appautoscaling_policy.backend_scale_in.arn}"
+  ]
 }
