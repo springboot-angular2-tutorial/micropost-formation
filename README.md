@@ -4,7 +4,6 @@
 
 * AWS VPC
 * AWS ECS with ALB and AutoScaling
-* AWS ECR
 * AWS RDS
 * Cloudflare DNS and CDN
 
