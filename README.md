@@ -1,5 +1,13 @@
 # micropost-formation
 
+## Core components
+
+* AWS VPC
+* AWS ECS with ALB and AutoScaling
+* AWS ECR
+* AWS RDS
+* Cloudflare DNS and CDN
+
 ## Dependencies
 
 * Terraform
