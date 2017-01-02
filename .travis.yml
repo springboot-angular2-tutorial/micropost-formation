@@ -11,7 +11,7 @@ install:
   - pip install awscli
   - aws --version
   # Install Terraform
-  - wget https://releases.hashicorp.com/terraform/0.7.13/terraform_0.7.13_linux_amd64.zip -O /tmp/terraform.zip
+  - wget https://releases.hashicorp.com/terraform/0.8.1/terraform_0.8.1_linux_amd64.zip -O /tmp/terraform.zip
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
 before_script:
