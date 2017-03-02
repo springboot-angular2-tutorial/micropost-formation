@@ -9,6 +9,9 @@ resource "aws_db_instance" "main" {
     "${var.security_groups}",
   ]
   db_subnet_group_name = "${aws_db_subnet_group.main.name}"
+  db_parameter_groups = [
+    "${aws_db_parameter_group.main}}"
+  ]
 }
 
 resource "aws_db_subnet_group" "main" {
@@ -17,4 +20,15 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = [
     "${var.subnets}"
   ]
+}
+
+resource "aws_db_parameter_group" "main" {
+  name = "main"
+  family = "mysql5.7"
+
+  // prevent password expiration
+  parameter {
+    name = "default_password_lifetime"
+    value = "0"
+  }
 }
