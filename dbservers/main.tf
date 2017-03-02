@@ -4,14 +4,11 @@ resource "aws_db_instance" "main" {
   engine = "mysql"
   engine_version = "5.7.10"
   instance_class = "db.t2.micro"
-  parameter_group_name = "default.mysql5.7"
+  parameter_group_name = "${aws_db_parameter_group.main.name}"
   vpc_security_group_ids = [
     "${var.security_groups}",
   ]
   db_subnet_group_name = "${aws_db_subnet_group.main.name}"
-  db_parameter_groups = [
-    "${aws_db_parameter_group.main}}"
-  ]
 }
 
 resource "aws_db_subnet_group" "main" {
