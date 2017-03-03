@@ -44,8 +44,8 @@ resource "aws_cloudwatch_log_group" "backend" {
 
 resource "aws_appautoscaling_target" "backend" {
   service_namespace = "ecs"
-  resource_id = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.backend.name}"
   scalable_dimension = "ecs:service:DesiredCount"
+  resource_id = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.backend.name}"
   role_arn = "${aws_iam_role.ecs_autoscale.arn}"
   min_capacity = 1
   max_capacity = 2
@@ -61,6 +61,8 @@ resource "aws_appautoscaling_policy" "backend_scale_out" {
     metric_interval_lower_bound = 0
     scaling_adjustment = 1
   }
+  service_namespace = "ecs"
+  scalable_dimension = "ecs:service:DesiredCount"
 }
 
 resource "aws_cloudwatch_metric_alarm" "backend_cpu_high" {
@@ -91,6 +93,8 @@ resource "aws_appautoscaling_policy" "backend_scale_in" {
     metric_interval_upper_bound = 0
     scaling_adjustment = -1
   }
+  service_namespace = "ecs"
+  scalable_dimension = "ecs:service:DesiredCount"
 }
 
 resource "aws_cloudwatch_metric_alarm" "backend_cpu_low" {
