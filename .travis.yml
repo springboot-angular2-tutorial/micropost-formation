@@ -24,8 +24,8 @@ script:
       echo "${TRAVIS_BRANCH} is not a branch to deploy."
     else
       source ./scripts/switch-role.sh
-      terraform get
       terraform init
+      terraform get
       terraform workspace new ${ENV}
       terraform plan
     fi
