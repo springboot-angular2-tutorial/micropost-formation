@@ -23,10 +23,18 @@ $ vi .envrc
 $ direnv allow
 ```
 
+Init
+```
+$ export ENV=stg
+$ source ./scripts/switch-role.sh
+$ terraform init
+$ terraform get
+$ terraform workspace select ${ENV}
+```
+
 Plan and Apply
 
 ```
-$ ./terraform-env.sh stg get
 $ ./terraform-env.sh stg plan
 $ ./terraform-env.sh stg apply
 ```

@@ -1,6 +1,7 @@
 variable "allowed_segments" {
   type = "list"
   default = [
+    "101.53.23.34/32",
   ]
 }
 
