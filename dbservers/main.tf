@@ -1,8 +1,9 @@
 resource "aws_db_instance" "main" {
   snapshot_identifier = "${var.snapshot_identifier}"
+  skip_final_snapshot = true
   allocated_storage = 5
   engine = "mysql"
-  engine_version = "5.7.10"
+  engine_version = "5.7.17"
   instance_class = "db.t2.micro"
   parameter_group_name = "${aws_db_parameter_group.main.name}"
   vpc_security_group_ids = [
@@ -19,13 +20,8 @@ resource "aws_db_subnet_group" "main" {
   ]
 }
 
+# It's not used.
 resource "aws_db_parameter_group" "main" {
   name = "main"
   family = "mysql5.7"
-
-  // prevent password expiration
-  parameter {
-    name = "default_password_lifetime"
-    value = "0"
-  }
 }

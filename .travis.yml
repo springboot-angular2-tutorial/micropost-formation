@@ -11,7 +11,7 @@ install:
   - pip install awscli
   - aws --version
   # Install Terraform
-  - TERRAFORM_VERSION="0.8.8"
+  - TERRAFORM_VERSION="0.10.2"
   - wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -O /tmp/terraform.zip
   - sudo unzip -d /usr/local/bin/ /tmp/terraform.zip
 
@@ -24,13 +24,15 @@ script:
       echo "${TRAVIS_BRANCH} is not a branch to deploy."
     else
       source ./scripts/switch-role.sh
-      ./terraform-env.sh ${ENV} get
-      ./terraform-env.sh ${ENV} plan
+      terraform get
+      terraform init
+      terraform workspace new ${ENV}
+      terraform plan
     fi
 
 deploy:
   - provider: script
-    script: ./terraform-env.sh ${ENV} apply
+    script: terraform plan
     skip_cleanup: true
     on:
       branch: deploy/*

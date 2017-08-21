@@ -1,2 +1,0 @@
-env = "prod"
-web_host_name = "micropost"

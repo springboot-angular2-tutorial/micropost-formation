@@ -115,9 +115,8 @@ resource "aws_autoscaling_notification" "web" {
 
 resource "aws_iam_instance_profile" "web" {
   name = "web"
-  roles = [
-    "${aws_iam_role.web.name}"
-  ]
+  role = "${aws_iam_role.web.name}"
+
 }
 
 resource "aws_iam_role" "web" {

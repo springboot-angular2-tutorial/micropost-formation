@@ -11,7 +11,7 @@ module "vpc" {
 
 module "webservers" {
   source = "./webservers"
-  env = "${var.env}"
+  env = "${terraform.workspace}"
   dbserver_endpoint = "${module.dbservers.endpoint}"
   newrelic_license_key = "${var.newrelic_license_key}"
   key_name = "${aws_key_pair.micropost.key_name}"

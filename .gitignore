@@ -9,6 +9,7 @@
 
 # tfstate is saved on remote
 .terraform
+terraform.tfstate.d
 terraform.log
 
 functions/*.zip
